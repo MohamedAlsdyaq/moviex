@@ -1,0 +1,86 @@
+
+.numb {
+  box-sizing: border-box;
+  text-align: center;
+ 
+  }
+  .number-wrap:hover .arrow{
+    opacity: 1;
+  }
+.number-wrap:hover {
+    
+    position: relative;
+   
+}
+.number-wrap     input {
+      width: 100%;
+      border: 1px;
+      outline: 1px;
+      text-align: center;
+    }
+
+    .arrow {
+      position: absolute;
+      opacity: 0;
+      transition: all 200ms linear;
+    }
+
+    .arrow .up {
+        left: 10px;
+        top: 3px;
+      }
+      .arrow .down {
+        top: 3px;
+        right: 10px;
+      }
+    }
+    .number {
+      padding: 0.6rem;
+      border-radius: 25px;
+      border: solid 1px #ddd;
+      margin: 0;
+      text-align: center;
+      -webkit-appearance: none;
+      -moz-appearance: textfield;
+      transition: all 200ms linear;
+         outline: none;
+        border-color: #999;
+}
+    
+ 
+
+
+figure{
+   width:90%; /*container-width*/
+   height: 200px;
+   overflow:hidden; /*hide bounds of image */
+   margin:0 0 0 0;
+   padding-left: 0;   /*reset margin of figure tag*/
+}
+figure .PostImage{
+
+  
+ 
+}
+#post{
+margin-bottom: 20px;
+  padding-top: 15px;
+}
+
+.creat_post_content{
+  position: relative;
+ 
+}
+
+ 
+
+.form-group {
+ width: 70%
+    
+}
+  .glyphicon {
+    color:  #95d7fc;
+  }
+#myNumber{
+  border: 1px solid #bdc3c7;
+}

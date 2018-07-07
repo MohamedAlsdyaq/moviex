@@ -1,0 +1,444 @@
+/*!
+ * Materialize v0.97.5 (http://materializecss.com)
+ * Copyright 2014-2015 Materialize
+ * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
+ */
+
+/* Functional styling;
+ * These styles are required for noUiSlider to function.
+ * You don't need to change these rules to apply your design.
+ */
+.noUi-target,
+.noUi-target * {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-ms-touch-action: none;
+-ms-user-select: none;
+-moz-user-select: none;
+-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.noUi-target {
+	position: relative;
+	direction: ltr;
+	background-color: #4f5859;
+}
+.noUi-base {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	color: white;
+
+	z-index: 1; /* Fix 401 */
+}
+.noUi-origin {
+	position: absolute;
+	right: 0;
+	top: 6px;
+	left: 0;
+	bottom: 0;
+}
+.noUi-handle {
+	position: relative;
+	z-index: 1;
+}
+.noUi-stacking .noUi-handle {
+/* This class is applied to the lower origin when
+   its values is > 50%. */
+	z-index: 10;
+}
+.noUi-state-tap .noUi-origin {
+-webkit-transition: left 0.25s, top 0.25s;
+	transition: left 0.25s, top 0.25s;
+}
+.noUi-state-drag * {
+	cursor: inherit !important;
+}
+
+/* Painting and performance;
+ * Browsers can paint handles in their own layer.
+ */
+.noUi-base {
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
+}
+
+/* Slider size and handle placement;
+ */
+.noUi-horizontal {
+	height: 18px;
+}
+.noUi-horizontal .noUi-handle {
+	width: 34px;
+	height: 28px;
+	left: -17px;
+	top: -6px;
+}
+.noUi-vertical {
+	width: 18px;
+}
+.noUi-vertical .noUi-handle {
+	width: 28px;
+	height: 34px;
+	left: -6px;
+	top: -17px;
+}
+
+/* Styling;
+ */
+.noUi-background {
+	background: #FAFAFA;
+	box-shadow: inset 0 1px 1px #f0f0f0;
+}
+.noUi-connect {
+	background: black;
+	box-shadow: inset 0 0 3px rgba(51,51,51,0.45);
+-webkit-transition: background 450ms;
+	transition: background 450ms;
+}
+.noUi-origin {
+	border-radius: 2px;
+}
+.noUi-target {
+	border-radius: 4px;
+	border: 1px solid #D3D3D3;
+	box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;
+}
+.noUi-target.noUi-connect {
+	box-shadow: inset 0 0 3px rgba(51,51,51,0.45), 0 3px 6px -5px #BBB;
+}
+
+/* Handles and cursors;
+ */
+.noUi-dragable {
+	cursor: w-resize;
+}
+.noUi-vertical .noUi-dragable {
+	cursor: n-resize;
+}
+.noUi-handle {
+	border: 1px solid #D9D9D9;
+	border-radius: 3px;
+	background: #FFF;
+	cursor: default;
+	box-shadow: inset 0 0 1px #FFF,
+				inset 0 1px 7px #EBEBEB,
+				0 3px 6px -3px #BBB;
+}
+.noUi-active {
+	box-shadow: inset 0 0 1px #FFF,
+				inset 0 1px 7px #DDD,
+				0 3px 6px -3px #BBB;
+}
+
+/* Handle stripes;
+ */
+.noUi-handle:before,
+.noUi-handle:after {
+	content: "";
+	display: block;
+	position: absolute;
+	height: 14px;
+	width: 1px;
+	background: #E8E7E6;
+	left: 14px;
+	top: 6px;
+}
+.noUi-handle:after {
+	left: 17px;
+}
+.noUi-vertical .noUi-handle:before,
+.noUi-vertical .noUi-handle:after {
+	width: 14px;
+	height: 1px;
+	left: 6px;
+	top: 14px;
+}
+.noUi-vertical .noUi-handle:after {
+	top: 17px;
+}
+
+/* Disabled state;
+ */
+[disabled].noUi-connect,
+[disabled] .noUi-connect {
+	background: #B8B8B8;
+}
+[disabled].noUi-origin,
+[disabled] .noUi-handle {
+	cursor: not-allowed;
+}
+
+/*Materialize Theming*/
+
+.noUi-target {
+
+  box-shadow: none;
+  border: none;
+}
+.noUi-base {
+  height: 15px;
+  top: -6px;
+}
+.noUi-background {
+  height: 3px;
+  top: 6px;
+  background-color: #bfbfbf;
+}
+.noUi-horizontal {
+  height: 3px;
+}
+.noUi-connect {
+  height: 4px;
+  top: 6px;
+  background-color: #2c3e50;
+  box-shadow: none;
+}
+
+/*Handle*/
+.noUi-horizontal .noUi-handle {
+  width: 15px;
+  height: 15px;
+  outline: none;
+  border-radius: 50%;
+  box-shadow: none;
+  background-color: #2c3e50;
+  border: 3px solid #2980b9;
+  left: -5px;
+  top: -6px;
+  transition: width .2s cubic-bezier(0.215, 0.610, 0.355, 1.000),
+              height .2s cubic-bezier(0.215, 0.610, 0.355, 1.000),
+              left .2s cubic-bezier(0.215, 0.610, 0.355, 1.000),
+              top .2s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+.noUi-handle:before {
+  content: none;
+}
+.noUi-handle:after {
+  content: none;
+}
+/*Handle on Drag*/
+.noUi-target .noUi-active.noUi-handle {
+  width: 3px;
+  height: 3px;
+  left: 0;
+  top: 0;
+}
+
+.noUi-target .noUi-active .range-label span {
+}
+.noUi-target .range-label {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  top: -17px;
+  left: -2px;
+  background-color: #1f80aa;
+  border-radius: 50%;
+  transition: border-radius .25s cubic-bezier(0.215, 0.610, 0.355, 1.000),
+              transform .25s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  transform: scale(.5) rotate(-45deg);
+  transform-origin: 50% 100%;
+}
+.noUi-target .noUi-active .range-label {
+  border-radius: 15px 15px 15px 0;
+  transform: rotate(-45deg) translate(23px, -25px);
+
+}
+.range-label span {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  transform: rotate(45deg);
+  opacity: 0;
+  position: absolute;
+  top: 7px;
+  left: -1px;
+  transition: opacity .25s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+.noUi-active .range-label span {
+  opacity: 1;
+}
+.noUi-value{
+	color: #ecf0f1 !important;
+	font-size: 12px;
+}
+
+
+
+.filter{
+ 
+	border: 1px solid #4f5859;
+	margin-left: 110px;
+	margin-right: 0;
+	color: #ecf0f1;
+
+
+}
+
+.filter_section{
+	
+	position: fixed;
+	background-color: #7f8c8d;
+	height: 107%;
+	padding-right: 0px;
+	padding-top: 78px;
+	margin-top: -100px;
+	padding-bottom: 50px;
+	overflow-y: scroll;
+	overflow-x: scroll;
+}
+
+.rating-select ul{list-style-type:none;margin:0}
+.rating-select li{float:left;background:#3f2e3e;font-size:12px;font-weight:900;text-transform:uppercase;color:#a3a9b7;padding:5px 10px;margin-right:5px;border-radius:2px}
+
+.rating-select li.active{background:#EDEEEF;color:#332532}
+
+.rating-select li.active:hover{background:#EDEEEF}
+
+
+.rating-select li:hover{background:#241a24}
+
+ .list-group-item{
+ 	background-color: inherit;
+ 	border: none;
+ }
+
+ .list{
+ 	width: 100%;
+	color: white;
+  list-style: none;
+}
+.list  li ul {
+
+    display: none;
+} 
+.list ul{
+  list-style: none;
+
+}
+.list li{
+	  vertical-align:middle;
+	 cursor:pointer;
+	 padding-left: 8px;
+	 background-color: transparent;
+	
+}
+
+.list-group-item:hover{
+	 
+	background-color: #727e7f !important;
+}
+
+.list-group-item{
+	 border-bottom:  1px solid #4f5859;
+	 width: 119%;
+	}
+
+	.n{
+		margin-left: -49px;
+		margin-right: -1500px;
+ 
+	}
+
+	.result_poster{
+
+	}
+
+	#filtering_results{
+		padding-left: 470px;
+	}
+
+	#searc_poster_content{
+		z-index: 5; 
+		background-repeat: no-repeat !important;
+		background-position: 70% 0% !important;
+		transition: .5s ease;
+		background-size: cover !important;
+min-height: 231px;
+	min-width: 140px;
+	max-width: 160px;
+        border-radius: 3px;
+}
+	#searc_poster_content:after{
+	display: none;
+	vertical-align: bottom;
+	content: '  ';
+	text-align: center;
+	color: white;
+min-height: 231px;
+	min-width: 140px;
+	top: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.5);
+         
+    
+}
+#searc_poster_content:hover .bottom{
+  display: block;
+}
+
+#searc_poster_content:hover:after{
+  display: block;
+}
+
+.search_poster{
+
+	position: relative;
+	float:left;
+	text-align: center;
+	 font-weight: normal;
+	   min-width: 175px;
+	   margin-top: 60px;
+}
+
+
+.search-container{
+  width: 100%;
+  margin-left: -35px !important	;
+  margin-top:  -30px !important;
+  display: block;
+ position: fixed;
+margin-bottom: 30px;
+
+}
+
+
+.bottom{
+	display: none;
+	bottom: 40px;
+ 	margin-left: 15px;
+	position: absolute;
+}
+input#search-bar::-webkit-input-placeholder{
+      transition: opacity 0.45s ease; 
+  	  opacity: 0;
+     }
+input#search-bar:-moz-placeholder {
+      transition: opacity 0.45s ease; 
+  	  opacity: 0;
+     }
+ 
+input#search-bar:-ms-placeholder {
+     transition: opacity 0.45s ease; 
+  	 opacity: 0;
+     }    
+input#search-bar{
+  margin: 0 auto;
+  width: 105%;
+
+  height: 60px;
+  padding: 0 20px;
+  font-size: 1rem;
+  border: 1px solid #D0CFCE;
+  outline: none;
+}
+.search-icon{
+  position: relative;
+  float: right;
+  width: 75px;
+  height: 75px;
+  top: -62px;
+  
+}
