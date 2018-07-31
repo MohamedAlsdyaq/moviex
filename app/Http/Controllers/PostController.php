@@ -4,17 +4,61 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests;
+use Auth;
+use App\Follow;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+ 
+  public function global(){
+      return Post::with('user')
+            ->with('likes')
+            ->with('comments')
+            ->with('postcontents')
+             ->orderBy('updated_at', 'desc')
+          ->paginate(3); 
+  }
+    public function following(){
+      $ids =  Follow::where('user1', $id)
+       // ->where('active', 1)
+        ->pluck('user2');
+      return Post::whereIn('user_id', $ids)
+            ->with('user')
+            ->with('likes')
+            ->with('comments')
+            ->with('postcontents')
+             ->orderBy('updated_at', 'desc')
+          ->paginate(3); 
+  }
+    public function movies(){
+      return Post::with('user')
+            ->with('likes')
+            ->with('comments')
+            ->with('postcontents')
+             ->orderBy('updated_at', 'desc')
+          ->paginate(3); 
+  }
+    public function tv(){
+      return Post::with('user')
+            ->with('likes')
+            ->with('comments')
+            ->with('postcontents')
+             ->orderBy('updated_at', 'desc')
+          ->paginate(3); 
+  }
+    public function report(Request $request)
     {
         //
+    
+        DB::table('reports')->insert(
+      [
+        'post_id' => $request['id'],
+        'comment' => $request['comment'],
+        'reason' => $request['reason'] 
+        ]
+        );
     }
 
     /**
@@ -22,64 +66,59 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+    
+ 
+
+        $post = new Post;
+        $post->user_id = Auth::user()->id;
+        $post->show_id = $request['movie_id'];
+        $post->content = $request['post'];
+        $post->spoiler = $request['spoiler'];
+        $post->ep_id = $request['ep_id'];
+        $post->save();
+ if($request['imgs']){
+if(count( $request['imgs'] ) != null );
+        PostcontentController::create($request['imgs'], $post->id);
+    }
+  }
+
+    public function GetPostsForShow($id){
+        return Post::where('show_id', $id)
+            ->with('user')
+            ->with('likes')
+            ->with('comments')
+            ->with('postcontents')
+             ->orderBy('updated_at', 'desc')
+          ->paginate(3);
+             
+    }
+     public function GetPostsForUser($id){
+        $posts =   Post::where('user_id', $id)
+            ->with('user')
+            ->with('likes')
+            ->with('show')
+            ->with('comments')
+            ->with('postcontents')
+            ->with('user')
+             ->orderBy('updated_at', 'desc')
+         ->get();
+  $library = LibraryController::GetUserEntries($id);
+    
+        $posts = $posts->merge($library)->sortBy('updated_at');
+ 
+         return $posts;
+    
+
+    }
+    public static function PostCount($id){
+        return Post::where('user_id', Auth::user()->id)
+        ->count();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Post $post)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Post $post)
-    {
-        //
+  public static function DeleteAll($id){
+        Post::where('user_id', $id)
+                ->delete();
     }
 }

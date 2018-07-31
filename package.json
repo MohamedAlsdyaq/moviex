@@ -19,6 +19,8 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
-    "nouislider": "^11.1.0"
+    "laravel-echo": "^1.4.0",
+    "nouislider": "^11.1.0",
+    "pusher-js": "^4.2.2"
   }
 }

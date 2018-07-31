@@ -5,11 +5,13 @@
 	<link rel="stylesheet" type="text/css" href="/css/movie.css">
 	<script src="/js/movie.js"></script>
 	<script src="/js/library.js"></script>
+    <script src="/js/post_control.js"></script>
 <link rel="stylesheet" href="/css/starrr.css">
     <script src="/js/starrr.js" ></script>
+    <script src="/js/react.js" ></script>
 	<style type="text/css">
 		.header{
-			    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ) , url('/toy.jpg') !important ;
+			 
     background-repeat: no-repeat !important;
     background-position: 50% 0 !important;
     transition: .5s ease;
@@ -42,26 +44,31 @@
 	    $('#real_nav').removeClass('navbar-default');
 </script>
 
+<input id="movie_name" type="hidden" value="" >
+<input id="movie_pic" type="hidden" value="" >
+<input id="ep_counts" type="hidden" value="" >
+
 <div id="reaction" class="w3-modal">
   <div style="width: 390px;" class="  w3-modal-content">
     <div class="reaction_container2  w3-container">
       <span onclick="document.getElementById('reaction').style.display='none'"
-      class=" w3-display-topright">&times;</span>
+      class=" cursor w3-display-topright">&times;</span>
        
        <div id="post_reaction" >
-       <p> Toy Story </p>
-     
-       <p class="v_small">2001 
+       <p id="movie_title"> </p>
+      <span style="float: right;" id="reaction_counter" > </span>
+       <p class="v_small" id="date"> </p>
+       
        	<hr>
-       <textarea class="" ></textarea>
+       <textarea data-name="reaction_counter" onkeypress="limit(this)" id="reaction_content" name="react" class="" >
+       </textarea>
        <br>
-       <button style="float: right" class="btn btn-success" >Post Reaction</button>
+       <button onclick="react(this)" style="float: right" class="btn btn-success" >Post Reaction</button>
     </div>
 
   </div>
  </div>
 </div>
-
 
 
 
@@ -93,36 +100,55 @@
 <div  class="col-sm-3 col-xs-12 row " > 
 	<div class="col-sm-10 col-xs-10" >
  <img id="poster" class="img-responsive"><br>
-              <div style="display: none" class="rating c"> 
-		<div class="center-block">
-		<i data-rating="1" class="fa fa-star-o"></i>
-		<i data-rating="2" class="fa fa-star-o"></i>
-		<i data-rating="3" class="fa fa-star-o"></i>
-		<i data-rating="4" class="fa fa-star-o"></i>
-		<i data-rating="5" class="fa fa-star-o"></i>
-		</div>
-		</div>
+            
 		
 			<div class="btn-groups" >
-			<div class="text-center add-to-library" > Add to Library </div>
-	<button onclick="completed()" style="background-color: #27ae60" class="btn butons" >Completed</button>
-	<br>
+	@if($rate == null )
+			<div class="text-center add-to-library" > Add to Library 
+	@else
+<div class="text-center add-to-library" > Edit Entry
+	@endif
+			</div>
 
-	<div id="rating_section" style="display: none" class="rating c"> 
+	<?php $display = 'block'; ?>
+	@if($rate == null )
+	<?php  $display = 'none';  ?>
+	@endif
+
+
+
+	<div id="rating_section" style="display: {{$display}}" class="rating c"> 
 	<div class="center-block">
-	<i data-rating="1" class="fa fa-star-o"></i>
-	<i data-rating="2" class="fa fa-star-o"></i>
-	<i data-rating="3" class="fa fa-star-o"></i>
-	<i data-rating="4" class="fa fa-star-o"></i>
-	<i data-rating="5" class="fa fa-star-o"></i>
-	</div>
-	</div>
 
-	<button onclick="document.getElementById('reaction').style.display='block'" id="watch-list" style="background-color: #16a085" class="btn butons" >Watch-list</button>
+	<i data-rating="1" class="fa stars fa-star-o"></i>
+	<i data-rating="2" class="fa stars fa-star-o"></i>
+	<i data-rating="3" class="fa stars fa-star-o"></i>
+	<i data-rating="4" class="fa stars fa-star-o"></i>
+	<i data-rating="5" class="fa stars fa-star-o"></i>
+	</div>
+	<script >
+
+	console.log({{$rate["rate"]}})
+	for(i={{$rate["rate"]}}; i>0; i--){
+	$("#rating_section").find(`[ data-rating='`+i+`']`) 
+	.addClass('selected fa-star').removeClass('fa-star-o');
+	}
+</script>
+<button onclick="document.getElementById('reaction').style.display='block'"   style="width:  150px; background-color: #1abc9c" class="btn butons" >Add Reaction</button>
+	</div>
+		@if($rate['status'] == 'WatchList' || $rate == null )
+	<button onclick="completed()" style="background-color: #27ae60" class="btn butons" >Watched</button>
+	@endif
 	<br>
-
-	<button id="started" style="background-color: #8e44ad" class="btn butons" >Started Watching</button>
-
+@if($rate == null )
+@if($rate == null )
+	<button onclick="watchList(this)" id="watch-list" style="background-color: #8e44ad" class="btn butons" >Watch-list</button>
+	@endif
+	<br>
+@if($rate == null )
+	
+@endif()
+@endif()
 	</div>
     <input id="score" type="hidden" value=" ">  
     <input id="status" type="hidden" value="">  
@@ -145,9 +171,11 @@
             </div>
             <hr>
  		<div  class="rounded col-sm-12">
-            	@include('modules.post')
-            	<br><br><br><br> 
-            	<div class="_4-u2 mbm _2iwp _4-u8" style="max-width: 100%;">
+            @if(Auth::check() )
+            @include('modules.post')
+            @endif()
+            	<br><br>
+<div class="col-sm-12 col-md-12  _4-u2 mbm _2iwp _4-u8" style="max-width: 95%;">
   <div class="_2iwo" data-testid="fbfeed_placeholder_story">
     <div class="_2iwq">
       <div class="_2iwr"></div>
@@ -165,7 +193,8 @@
     </div>
   </div>
 </div>
-<div class="_4-u2 mbm _2iwp _4-u8" style="max-width: 100%;">
+
+<div class="col-sm-12 col-md-12_4-u2 mbm _2iwp _4-u8" style="max-width: 95%;">
   <div class="_2iwo" data-testid="fbfeed_placeholder_story">
     <div class="_2iwq">
       <div class="_2iwr"></div>
@@ -252,5 +281,22 @@
 
 <script >
 	
+    $(window).scroll(function() {
+        if ($(window).scrollTop() < 100 ){
+            $('#real_nav').removeClass('navbar-default');
+        } else {
+           $('#real_nav').addClass('navbar-default');
+        };
+    });
+        $('#real_nav').hover(function () {
+      
+         $('#real_nav').addClass('navbar-default');
+    });
+
+$('#real_nav').mouseleave(function(){
+  $('#real_nav').removeClass('navbar-default');
+});
+
+
 
 </script>

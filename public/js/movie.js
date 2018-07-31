@@ -10,7 +10,6 @@ function imageExists(image_url){
   return http.status == 200;
       // this will return 200 on success, and 0 or negative value on error
 }
-
 var movie_id = window.location.href;
 movie_id = movie_id.split('movie/');
 movie_id = movie_id[1].split('?');
@@ -67,13 +66,19 @@ for(i=0; i<ajax.genres.length; i +=1){
 var imdb = '<a href="http://www.imdb.com/title/'+ajax.imdb_id+'"> IMDB </a>';
 var homepage = '<a href="'+ajax.homepage+'"> Movie Page </a>';
 
-
+            $('#movie_name').val(name);
+            $('#movie_pic').val(pic);
             $('#poster').attr('src', pic); 
+            $('.poster').attr('src', pic); 
             $('#backdrop').css({
             
             'background': 'linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ) , url('+backdrop+')',
 
-            });   
+            });  
+            $('.reaction_container2').css({
+            'background': 'linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ) , url('+backdrop+')',
+
+            }); 
             $('#movie_title').html(name);
             $('title').html(name+' | Nanashi');
             $('#links').html(imdb+' . '+homepage);
@@ -92,7 +97,8 @@ for(i=0; i<ajax.genres.length; i +=1){
        }
        $('#movie_date').val(date);         
        $('#movie_rate').val(score);         
-       $('#movie_bio').val(bio);         
+       $('#movie_bio').val(bio);  
+       $('.bio').html(bio);         
        $('#movie_length').val(length);                
 
            // $('#movie_date').html(data) ;

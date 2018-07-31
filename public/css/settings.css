@@ -54,16 +54,36 @@
 	font-size: 20px;
 	font: 1.2em "Fira Sans", monospace;
 }
-.stng_active{
+.sg_active{
 border-bottom: 3px solid red !important;
 	opacity: 1;
+	
 }
-
+.w3-bar-item{
+	font-weight: bold;
+	font-size: 17px;
+}
 .blocking_container{
-	background-color: grey;
-	border: 1px solid #757575;
+ 
+	border: 2px solid #bdc3c7;
 	border-radius: 5px;
 	margin-top: 10px;
 	height: 120px;
-	padding: 40px;
+	padding: 30px;
+}
+.blocking_container button:hover button{
+ 
+	border: 2px solid #c0392b;
+ 
+}
+
+.disabled{
+	color: white;
+	background-color: #95a5a6;
+}
+
+.notification-settings--headers{
+	padding:10px;width:100%;font-size:12px;margin-top:10px;
+	border-radius: 5px;
+	border: 2px solid #bdc3c7;
 }

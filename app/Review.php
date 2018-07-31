@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     //
+          public function tv(){
+        return $this->belongsTo('App\Tv');
+    }
+          public function movie(){
+        return $this->belongsTo('App\Movie');
+    }
 }

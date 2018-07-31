@@ -12,9 +12,11 @@ class FavoriteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public static function index($id)
     {
-        //
+     return Favorite::where('user_id', $id)
+            ->with('show')
+        ->get();
     }
 
     /**
@@ -78,8 +80,9 @@ class FavoriteController extends Controller
      * @param  \App\Favorite  $favorite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Favorite $favorite)
+    public function delete( $id)
     {
-        //
+         Favorite::findOrFail($id)
+            ->delete();
     }
 }

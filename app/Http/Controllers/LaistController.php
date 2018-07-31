@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Laist;
 use Illuminate\Http\Request;
-
+use Auth;
 class LaistController extends Controller
 {
     /**
@@ -12,9 +12,13 @@ class LaistController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function GetListForUser($id)
     {
         //
+
+         return Laist::where('user_id', $id)
+             ->orderBy('updated_at', 'desc')
+         ->paginate(6);
     }
 
     /**
@@ -44,8 +48,10 @@ class LaistController extends Controller
      * @param  \App\Laist  $laist
      * @return \Illuminate\Http\Response
      */
-    public function show(Laist $laist)
+    public static function listcount($id)
     {
+         return Laist::where('user_id', Auth::user()->id)
+        ->count();
         //
     }
 
@@ -81,5 +87,9 @@ class LaistController extends Controller
     public function destroy(Laist $laist)
     {
         //
+    }
+      public static function DeleteAll($id){
+        Post::where('user_id', $id)
+                ->delete();
     }
 }

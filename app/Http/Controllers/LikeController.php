@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Like;
 use Illuminate\Http\Request;
-
+use Auth;
 class LikeController extends Controller
 {
     /**
@@ -67,9 +67,16 @@ class LikeController extends Controller
      * @param  \App\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Like $like)
+    public function LikePost($id)
     {
         //
+        if(Auth::guest())
+            return 0;
+        $like = new Like;
+        $like->user_id = Auth::user()->id;
+        $like->post_id = $id;
+        $like->save();
+        return 1;
     }
 
     /**

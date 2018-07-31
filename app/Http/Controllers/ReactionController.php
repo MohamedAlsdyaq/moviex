@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Reaction;
 use Illuminate\Http\Request;
+use App\Http\Requests;
+use Auth;
 
 class ReactionController extends Controller
 {
@@ -12,9 +14,16 @@ class ReactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function GetReactionsForUser($id)
     {
         //
+          return Reaction::where('user_id', $id)
+            
+            ->with('likes')
+            ->with('show')
+            ->with('comments')
+             ->orderBy('updated_at', 'desc')
+          ->paginate(6);
     }
 
     /**
@@ -22,8 +31,14 @@ class ReactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+
+        $react = new Reaction;
+        $react->user_id = Auth::user()->id;
+        $react->show_id = $request['movie_id'];
+        $react->reaction = $request['reaction'];
+        $react->save();
         //
     }
 
@@ -44,9 +59,13 @@ class ReactionController extends Controller
      * @param  \App\Reaction  $reaction
      * @return \Illuminate\Http\Response
      */
-    public function show(Reaction $reaction)
+    public static function reactioncount($id)
     {
         //
+
+        return Reaction::where('user_id', Auth::user()->id)
+        ->count();
+    
     }
 
     /**
@@ -81,5 +100,9 @@ class ReactionController extends Controller
     public function destroy(Reaction $reaction)
     {
         //
+    }
+      public static function DeleteAll($id){
+        Post::where('user_id', $id)
+                ->delete();
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Movie;
+use App\Show;
 use Illuminate\Http\Request;
+use Auth;
+use App\Library;
 
 class MovieController extends Controller
 {
@@ -12,9 +14,18 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        
+        $rate = null;
+
+        if(Auth::check())
+    $rate = Library::where('user_id', Auth::user()->id)
+            ->where('show_id', $id)
+            ->first();
+
+            return View('movie')->with(
+                'rate', $rate);
     }
 
     /**
@@ -22,9 +33,20 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public static function add($request, $id)
     {
         //
+         Show::updateOrCreate([
+ 
+ 'id' => $id
+       ], [
+      
+       'show_name' => $request['movie_name'],
+       'id' => $id,
+       'show_pic' => $request['movie_pic'],
+     
+       
+    ]);
     }
 
     /**

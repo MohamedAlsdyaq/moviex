@@ -53,12 +53,18 @@ div.tab button:hover{
 
 }
 .active_btn_switcher{
+    background-color: white !important;
+    border-bottom: 2px solid #f5f8fa;
+    margin-bottom: -2px;
+
+}
+.active_btn_switcher:hover{
     background-color: #bdc3c7 !important;
 
 }
 
 .custom_btns{
-    opacity: 0.6;
+    opacity: 0.4;
     border: 2px solid  #f5f8fa;
     border-radius: 2%;
     margin-top: 5px;
@@ -90,8 +96,8 @@ div.tab button:hover{
 .thumnail_library{
         border-radius: 5px;
         background-color: #2c3e50;
-        width: 156px;
-        min-height: 222px;
+        width: 136px;
+        height:182px;
         float: left;
         margin: 1px;
         z-index: -1;
@@ -99,6 +105,10 @@ div.tab button:hover{
         margin-bottom: 50px;
 }
 
+.thumnail_library:hover{
+  height: 200px;
+}
+}
  
 #lib_poster_container {
     content: ' ';
@@ -110,26 +120,17 @@ div.tab button:hover{
     height: 100%;
     z-index: 1;
     opacity: 0.9;   
-    background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) ) , url('/3.jpg') !important ;
-    background-repeat: no-repeat !important;
-    background-position: 50% 0 !important;
+       background-repeat: no-repeat !important;
+ max-height: 235px;
     transition: .5s ease;
     background-size: cover !important;
-    min-height: 200px;
+ 
     overflow: hidden;
     position: relative;
-    max-height: 200px;
+    
     
 }
-#lib_poster_container:hover{
-   
-     background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7) ) , url('/3.jpg') !important ;
- background-repeat: no-repeat !important;
-    background-position: 100% 0 !important;
-    transition: .5s ease;
-    background-size: cover !important;
-    
-}
+ 
 #lib_poster_container:hover .anchors_for_poster{
    
     visibility: visible;
@@ -145,15 +146,18 @@ div.tab button:hover{
 .reaction_container{
   border-radius: 5px;
   background-color: black;
-  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7) ) , url('http://www.twitrcovers.com/wp-content/uploads/2014/09/Toy-story-3-l.jpg') !important ;
-  background-repeat: no-repeat !important;
-  background-position: 50% 0 !important;
+   background-repeat: no-repeat !important;
+  background-position: 100% 50% !important;
   background-size: cover !important;
   padding: 3%;
   height: 370px;
-  color: white !important;
+  margin-right: 15px;
+color: white;
   position:relative
 }
+.reaction_container button{
+  color: black;
+  }
 .reaction_info{
     position:absolute;bottom:0;
 }
@@ -350,7 +354,7 @@ div.tab button:hover{
 
 .twPc-div {
     background: #fff none repeat scroll 0 0;
-    border: 1px solid #e1e8ed;
+  
    overflow-y: auto;
     height: 600px;
     width: 100%; 
@@ -359,7 +363,7 @@ div.tab button:hover{
   
 }
 .twPc-bg {
-      background-image:  url('/toy.jpg')  ;
+     
     background-repeat: no-repeat !important;
 
 
@@ -380,19 +384,6 @@ div.tab button:hover{
 }
 .twPc-bg i{
   margin-top: 20px;
-}
-.twPc-bg:after {
-   content: '/A';
-    position: absolute;
-     height: 155px;
-    width: 100%;
-    top:0; 
-    left:0;
-    background:rgba(0,0,0,0.6);
-    opacity: 1;
-    transition: opacity 0.5s;
-    -webkit-transition: opacity 0.5s;
-    -moz-transition: opacity 0.5s;
 }
 
 .twPc-bg:hover:after{
@@ -519,7 +510,7 @@ background-color: #ecf0f1 !important;
 .common2{
     margin: 20px;
   padding: 10px;
-  width: 70%;
+  width: 100%;
 }
 #links{
   }
@@ -538,13 +529,20 @@ background-color: #ecf0f1 !important;
         -ms-filter: grayscale(0%);
             filter: grayscale(0%); 
 }
-.active_social{
-      -webkit-filter: grayscale(0%);
+#active_link_img{
+    -webkit-filter: grayscale(0%);
        -moz-filter: grayscale(0%);
          -o-filter: grayscale(0%);
         -ms-filter: grayscale(0%);
             filter: grayscale(0%); 
 }
+.active_social{
+     -webkit-filter: grayscale(0%) !important;
+       -moz-filter: grayscale(0%) !important;
+         -o-filter: grayscale(0%) !important;
+        -ms-filter: grayscale(0%) !important;
+            filter: grayscale(0%) !important; 
+          }
 
 #social-icons{
   width: 100%;
@@ -726,6 +724,8 @@ h1{ text-align:center}
  }
 
  ._4-u8 {
+  margin-left: -15px;
+   width: 100% !important;
   background-color: #fff;
 }
 ._4-u2 {
@@ -877,9 +877,10 @@ div._2ix0 {
 
 #new_welcome{
   width: 540px; 
+  margin-left:-15px;
   height: 183px;
-  border:2px  grey dashed ;
-  padding: 5px;
+  border:2px  #999999 dashed ;
+  padding: 20px;
   overflow: hidden;
 }
 #new_welcome p{
@@ -954,4 +955,18 @@ div._2ix0 {
 }
 #poster:hover:after{
   display: block;
+}
+
+.fav_container{
+  width: 90%;
+  padding: 20px;
+  margin-bottom: 10px;
+  background-color: white;
+  height: 60px;
+  border-radius: 2px;
+  border: 1px solid black;
+}
+.fav_container img{
+  height: 59px !important;
+  margin-right: 5px;
 }

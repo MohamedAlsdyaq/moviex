@@ -8,6 +8,39 @@ function change_setting_section(evt, name){
 
     tablinks = document.getElementsByClassName("w3-bar-item");
     for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace("sg_active", "");
+    }
+    document.getElementById(name).style.display = "block";
+    evt.currentTarget.className += " sg_active";
+  
+}
+function fav_toggle(evt, name){
+ var i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("common3");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("w3-bar-item");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace("active_fav", "");
+    }
+    document.getElementById(name).style.display = "block";
+    evt.currentTarget.className += " active_fav";
+  
+}
+
+function change_edit_section(evt, name){
+ var i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("common2");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("w3-bar-item");
+    for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace("stng_active", "");
     }
     document.getElementById(name).style.display = "block";
@@ -55,6 +88,24 @@ function change_section(evt, name) {
     window[name](id, type);
 
 }
+function change_section_user(evt, name) {
+ var i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("common");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace("current_tab", "");
+    }
+    document.getElementById(name).style.display = "block";
+    evt.currentTarget.className += " current_tab";
+
+ 
+
+}
 function imageExists(image_url){
 
 
@@ -89,24 +140,23 @@ function gallery(id, type){
              $('.loading').hide();
 
 
-            if(images[12]){
+   
 
-            for(i=0; i<13; i += 1){
-              $('#gallery_photos').append('<a href="http://image.tmdb.org/t/p/w500'+images[i].file_path+'"" data-lity  ><img class="max" src="http://image.tmdb.org/t/p/w500'+images[i].file_path+'"></a>');
+            for(i=0; i<images.length; i += 1){
+              $('#gallery_photos').append('<a href="http://image.tmdb.org/t/p/w185'+images[i].file_path+'" data-lity  ><img class="max" src="http://image.tmdb.org/t/p/w185'+images[i].file_path+'"></a>');
                  }
-            }
-            else
-              $('#gallery_photos').html('<div class="col-sm-12"> <h4>No Images Found for This Movie</h4>')
-
+          
+ }
             //
-          }
+         
               });
 }
 
 function recommendation(id, type){
  
    
-  var url = 'https://api.themoviedb.org/3/'+type+'/'+id+'/recommendations?api_key='+api_key+'&language=en-US&include_image_language=en';
+  var url = 'https://api.themoviedb.org/3/'+type+'/'+id+'/recommendations?api_key='+api_key+'&language=en-US&include_image_language=en&page=1';
+   console.log(url);
  
     $.ajax({
         type: 'GET',
@@ -122,15 +172,21 @@ function recommendation(id, type){
         success: function(ajax) {
          console.log(ajax);
               $('#recommendation').html(' ');
-    var movies = ajax.results;
+    var data = ajax.results;
     if(type == 'movie' ){
     for(i=0; i<20; i++){
-        $('#recommendation').append(' <div class="custom_card2"><a href="/movie/'+movies[i].id+' ">           <img width="110" height="190" src="http://image.tmdb.org/t/p/w500'+movies[i].poster_path+'"> </a> <h5 class="text-center"><small>'+movies[i].original_title+'<small><h5></a></div>');
+          if(data[i].original_language != 'en')
+      continue;
+      bio = data[i].overview.replace(/"/g, '`');
+        $('#recommendation').append('<div data-toggle="popover" data-placement="left" data-original-title="<h6>'+data[i].title + '<span> '+ get_year(data[i].release_date)+'</span></h6><h6><span style=&quot;float:left;color:red;margin-right:2px;;&quot; class=&quot; fa fa-heart&quot; ></span>  popularity: '+Math.round(data[i].popularity)+'<sp style=&quot;float:right;&quot; ><span style=&quot;color:yellow;margin:2px;&quot; class=&quot;fa fa-star&quot; ></span>   Av Rating : '+data[i].vote_average+'</sp></h6>" data-content="<div ><h6>'+bio+'</h6></div>" onclick="go_to_page("/movie/'+data[i].id+'")" class="search_poster"> <div id="searc_poster_content" style=" background-image: url(http://image.tmdb.org/t/p/w154'+data[i].poster_path+');" > <div class="bottom dropdown"> <a class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Add to library </a>  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4"> <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].title+'`, `completed`, null);" >Completed</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].title+'`, `watchlist`, null);" class="dropdown-item" type="button">watch List</a> </li> </ul></div></div><div class="ellipsis"><a href="/movie/'+data[i].id+'"><h6>'+data[i].title+'</h6></a></div></div>');
     }
   }
         if(type == 'tv' ){
     for(i=0; i<20; i++){
-        $('#recommendation').append(' <div class="custom_card2"><a href="/movie/'+movies[i].id+' ">           <img width="110" height="190" src="http://image.tmdb.org/t/p/w500'+movies[i].poster_path+'"> </a> <h5 class="text-center"><small>'+movies[i].original_name+'<small><h5></a></div>');
+          if(data[i].original_language != 'en')
+      continue;
+      bio = data[i].overview.replace(/"/g, '`');
+        $('#recommendation').append('<div data-toggle="popover" data-placement="left" data-original-title="<h6>'+data[i].original_name + '<span> '+ get_year(data[i].first_air_date)+'</span></h6><h6><span style=&quot;float:left;color:red;margin-right:2px;;&quot; class=&quot; fa fa-heart&quot; ></span>  popularity: '+Math.round(data[i].popularity)+'<sp style=&quot;float:right;&quot; ><span style=&quot;color:yellow;margin:2px;&quot; class=&quot;fa fa-star&quot; ></span>   Av Rating : '+data[i].vote_average+'</sp></h6>" data-content="<div ><h6>'+bio+'</h6></div>" onclick="go_to_page("/movie/'+data[i].id+'")" class="search_poster"> <div id="searc_poster_content" style=" background-image: url(http://image.tmdb.org/t/p/w154'+data[i].poster_path+');" > <div class="bottom dropdown"> <a class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Add to library </a>  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4"><li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watching`, null);" >Watching</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `completed`, null);" >Completed</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watchlist`, null);" class="dropdown-item" type="button">watch List</a> </li> </ul></div></div><div class="ellipsis"><a href="/tv/'+data[i].id+'"><h6 >'+data[i].original_name+'</h6></a></div></div>');
     }
   }
 
@@ -164,7 +220,7 @@ function staff(id, type){
             
               if(crew){
               for(i=0; i<cast.length; i += 1){
-                image_url = "http://image.tmdb.org/t/p/w500"+cast[i].profile_path+"";
+                image_url = "http://image.tmdb.org/t/p/w342"+cast[i].profile_path+"";
                 if(imageExists(image_url))
                  $('.staff').append('<div class="app-img-wrapper">  <a href="/actor/'+cast[i].cast_id+'" class="app-img-link" title="Image 1"><img src="http://image.tmdb.org/t/p/w500'+cast[i].profile_path+'" class="img-responsive app-img" alt="App"><h4 class="app-img-text">'+cast[i].character + ' (<small>'+cast[i].name+'</small>)'+'</h4></a></div> ');
                 else
@@ -173,7 +229,7 @@ function staff(id, type){
 
 
               for(i=0; i<crew.length; i += 1){
-                image_url = "http://image.tmdb.org/t/p/w500"+crew[i].profile_path+"";
+                image_url = "http://image.tmdb.org/t/p/w342"+crew[i].profile_path+"";
                 if(imageExists(image_url))
                   $('#crew').append('<div class="app-img-wrapper">  <a class="app-img-link" title="Image 1"><img src="http://image.tmdb.org/t/p/w500'+crew[i].profile_path+'" class="img-responsive app-img" alt="App"><h4 class="app-img-text">'+crew[i].name + ' (<small>'+crew[i].job+'</small>)'+'</h4></a></div> ');
                 else

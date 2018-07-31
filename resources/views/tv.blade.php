@@ -7,9 +7,13 @@
 	<script src="/js/library.js"></script>
 <link rel="stylesheet" href="/css/starrr.css">
     <script src="/js/starrr.js" ></script>
-	 
-	
+    <script src="/js/react.js" ></script>
+    <script src="/js/update_entry.js" ></script>
+      <script src="/js/post_control.js"></script>
 	<style type="text/css">
+  html{
+    overflow-x: hidden !important;
+  }
 		.header{
 			 background-repeat: no-repeat !important;
     background-position: 50% 50% !important;
@@ -38,21 +42,173 @@
 <script type="text/javascript">
 	    $('#real_nav').removeClass('navbar-default');
 </script>
+<input id="movie_name" type="hidden" value="" >
+<input id="movie_pic" type="hidden" value="" >
+<input id="ep_counts" type="hidden" value="" >
+<input id="reported_post" type="hidden">
 
+<div class="modal fade" id="report_modal" tabindex="-1" role="dialog" aria-labelledby="purchaseLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+               
+                <div class="modal-body">
+                  <h4>Please give a reason for reporting this content. </h4>
+     <form id="report_form">
+     <select name="reason" style="width: 100%"  id="inputState" placeholder="Reason" class="form-control">
+        <option >Spoiler</option>
+        <option>Offensive</option>
+        <option>Bullying</option>
+        <option>Explicit Content</option>
+         <option>Other</option>
+      </select>
+      <input type="hidden" name="id" id="report_id" value="">
+      <br>
+      <textarea name="comment" onkeydown="check_length(this)" placeholder="What's wrong with this content? (Optional)" class="form-control report_reason" rows="3" style="width: 100%" ></textarea><br>
+    </form>
+                </div>
+               <button  style="color: white !important; display: block; margin: auto; width: 70%" class="disabled btn btn-lg btn-block reporting_button" >Report </button>
+               <br>
+            </div>
+        </div>
+    </div>
+
+
+<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"
+   id="id01" >
+   <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       
+        <h2 style="text-align: center;" id="movie_title" >  </h2>
+<hr>
+         <div class="" >
+          <div style="padding-left: 10%;" class=" " >
+          
+            <div >
+
+
+  <form  id="update_form">
+  
+  @if($rate != null )
+  <input id="entry_id" type="hidden" name="id"  value="{{$rate['id']}}">   
+  @endif
+  <div class=" row">
+    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Status</label>
+    <div  class="col-sm-8">
+        <select name="status" style="color: black !important" style="" class="butons custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <option value="watching" name="started"  >Currently watching</option>
+        <option value="completed" name="completed" >Completed</option>
+        <option value="dropped" name="dropped" >Dropped</option>
+       
+      </select>
+    </div>
+  </div>
+ 
+<?php
+$finished_at = '';
+$started_at = ' ';
+$note = '';
+ if($rate != null ){
+  $finished_at = $rate['finished_at'];
+  $started_at = $rate['started_at'];
+  $note = $rate['note'];
+ }
+$url =  $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+$url = substr($url,10);
+
+if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
+ $progress = 0;
+ if($rate != null )
+  $progress = $rate['ep_count'];
+ ?>
+ <br>
+  <div class="f row">
+    <label for="colFormLabel" class="col-sm-2 col-form-label">Progress</label>
+    <div  class="col-sm-8">
+
+  <div class=" ">
+    
+<input name="progress" style="width:80%;float: left;" max="" id="number" type="number" class="form-control touchspin" value="{{$progress}}">
+
+
+<div style="height: 36px; width: 50px; background-color: #ecf0f1; float: right;" id="of_ep"></div>
+  </div>
+
+    </div> 
+
+  </div>
+  <br>
+  <?php } ?>
+  <div class="f row">
+    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Rewatch Count</label>
+    <div class="col-sm-8">
+   <select name="rewatch" style="color: black !important" class="butons selectpicker">
+      <option  data-name="0" >0</option>
+      <option data-name="1" >1</option>
+      <option data-name="2" >2</option>
+    </select>
+    </div>
+  </div>
+  <br>
+  <div class=" row">
+    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Started Date</label>
+    <div class="col-sm-8">
+       <input placeholder="{{$started_at}}" name="started_at"    type="date"  class="form-control " >
+    </div>
+  </div>
+  <br>
+    <div class=" row">
+    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Finished Date</label>
+    <div class="col-sm-8">
+            <input placeholder="{{$finished_at}}" value="" name="finished_at"   type="date"  class="form-control " >
+    </div>
+  </div>
+  <br>
+  <div class=" row">
+    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Notes</label>
+    <div class="col-sm-8">
+      <textarea name="note" style=" resize: none" class="form-control" id="" rows="3"> {{$note}} </textarea>
+    </div>
+  </div>
+
+      
+</form>
+   </div>
+</div>
+<hr style="height: 2px;" >
+<div style="height: 30px; margin-bottom: 10px;">
+   <button onclick="delete_entry()" style="float: left" class="btn btn-default"><i class="fa fa-trash"></i> </button>
+
+          <button onclick="update_entry_quick({{$rate['id']}})" style="float: right" class="btn btn-success"> Save Changes </button>
+     
+     
+  </div>
+                </div>
+          </div>
+
+           
+       
+     
+      </div>
+   
+  </div>
+</div>
 <div id="reaction" class="w3-modal">
   <div style="width: 390px;" class="  w3-modal-content">
     <div class="reaction_container2  w3-container">
       <span onclick="document.getElementById('reaction').style.display='none'"
-      class=" w3-display-topright">&times;</span>
+      class=" cursor w3-display-topright">&times;</span>
        
        <div id="post_reaction" >
-       <p> Toy Story </p>
-     
-       <p class="v_small">2001 
+       <p id="movie_title"> </p>
+      <span style="float: right;" id="reaction_counter" > </span>
+       <p class="v_small" id="date"> </p>
+       
        	<hr>
-       <textarea class="" ></textarea>
+       <textarea data-name="reaction_counter" onkeypress="limit(this)" id="reaction_content" name="react" class="" >
+       </textarea>
        <br>
-       <button style="float: right" class="btn btn-success" >Post Reaction</button>
+       <button id="post_a_post" onclick="react(this)" style="float: right" class="btn btn-success" >Post Reaction</button>
     </div>
 
   </div>
@@ -84,52 +240,72 @@
   <button class="tablinks" onclick="change_section(event, 'staff', 'tv')">Staff</button>
 </div>
 </div>
-<div class="container">
+<div class="">
 
 <div  class="col-sm-3 col-xs-12 row " > 
 	<div class="col-sm-10 col-xs-10" >
-<a id="p_anchor" href="" data-lity> 
-<div id="poster" > </div>
-</a>
- <br>
-              <div style="display: none" class="rating c"> 
-		<div class="center-block">
-		<i data-rating="1" class="fa fa-star-o"></i>
-		<i data-rating="2" class="fa fa-star-o"></i>
-		<i data-rating="3" class="fa fa-star-o"></i>
-		<i data-rating="4" class="fa fa-star-o"></i>
-		<i data-rating="5" class="fa fa-star-o"></i>
-		</div>
-		</div>
+ <img id="poster" class="img-responsive"><br>
+            
 		
 			<div class="btn-groups" >
+	@if($rate == null )
+			<div class="text-center add-to-library" > Add to Library 
+	@else
+<div class="text-center add-to-library" > Edit Entry
+	@endif
+			</div>
 
- 
-			<div class="text-center add-to-library" > Add to Library </div>
-	<button onclick="completed()" style="background-color: #27ae60" class="btn butons" >Completed</button>
-	<br>
+	<?php $display = 'block'; ?>
+	@if($rate == null )
+	<?php  $display = 'none';  ?>
+	@endif
 
-	<div id="rating_section" style="display: none" class="rating c"> 
+
+
+	<div id="rating_section" style="display: {{$display}}" class="rating c"> 
 	<div class="center-block">
-	<i data-rating="1" class="fa fa-star-o"></i>
-	<i data-rating="2" class="fa fa-star-o"></i>
-	<i data-rating="3" class="fa fa-star-o"></i>
-	<i data-rating="4" class="fa fa-star-o"></i>
-	<i data-rating="5" class="fa fa-star-o"></i>
-	</div>
-	</div>
 
-	<button onclick="document.getElementById('reaction').style.display='block'" id="watch-list" style="background-color: #16a085" class="btn butons" >Watch-list</button>
+	<i data-rating="1" class="fa stars fa-star-o"></i>
+	<i data-rating="2" class="fa stars fa-star-o"></i>
+	<i data-rating="3" class="fa stars fa-star-o"></i>
+	<i data-rating="4" class="fa stars fa-star-o"></i>
+	<i data-rating="5" class="fa stars fa-star-o"></i>
+	</div>
+	<script >
+
+	console.log({{$rate["rate"]}})
+	for(i={{$rate["rate"]}}; i>0; i--){
+	$("#rating_section").find(`[ data-rating='`+i+`']`) 
+	.addClass('selected fa-star').removeClass('fa-star-o');
+	}
+</script>
+<button onclick="document.getElementById('reaction').style.display='block'"   style="width:  150px; background-color: #1abc9c" class="btn butons" >Add Reaction</button>
+	</div>
+		@if($rate['status'] == 'WatchList' || $rate == null )
+	<button onclick="completed(this)" style="background-color: #27ae60" class="btn butons" >Completed</button>
+	@endif
 	<br>
-
-	<button id="started" style="background-color: #8e44ad" class="btn butons" >Started Watching</button>
-
+@if($rate == null )
+@if($rate == null )
+	<button onclick="watchList(this)" id="watch-list" style="background-color: #8e44ad" class="btn butons" >Watch-list</button>
+	@endif
+	<br>
+@if($rate == null )
+		<button onclick="started(this)" id="started" style="background-color: #3498db" class="btn butons" >Watching</button>
+@endif()
+@endif()
+@if($rate != null )
+<p  class="cursor" data-toggle="modal" style="text-align: center;" data-target="#id01">Edit Library Entry </p>
+ 
+@endif
 	</div>
     <input id="score" type="hidden" value=" ">  
     <input id="status" type="hidden" value="">  
     <input value="" type="hidden" class="movie_id">
 
 </div>
+
+
 </div>
 
 <div class="col-sm-9 col-xs-12" > 
@@ -152,9 +328,12 @@
             </div>
             <hr>
  		<div  class="rounded col-sm-12">
-            	@include('modules.post')
-            	<br><br><br><br> 
-            	<div class="_4-u2 mbm _2iwp _4-u8" style="max-width: 100%;">
+             @if(Auth::check() )
+            @include('modules.post')
+            @endif()
+            	<br><br>
+        <div id="posts_loading" >
+<div class="col-sm-12 col-md-12  _4-u2 mbm _2iwp _4-u8"  >
   <div class="_2iwo" data-testid="fbfeed_placeholder_story">
     <div class="_2iwq">
       <div class="_2iwr"></div>
@@ -172,7 +351,8 @@
     </div>
   </div>
 </div>
-<div class="_4-u2 mbm _2iwp _4-u8" style="max-width: 100%;">
+
+<div class="col-sm-12 col-md-12_4-u2 mbm _2iwp _4-u8"  >
   <div class="_2iwo" data-testid="fbfeed_placeholder_story">
     <div class="_2iwq">
       <div class="_2iwr"></div>
@@ -190,6 +370,8 @@
     </div>
   </div>
 </div>
+      </div>
+      <div class="col-sm-12 col-xs-12 no_more_inactive" style="text-align: center;" ></div>
             	 </div>
             	</div>
             	
@@ -197,7 +379,11 @@
 
 
 		<a id="video" href="" data-lity>
-		<img class="img-responsive " src="/img/trailer.gif">
+
+		<div id="" class="trailer " >
+     <img class="img-responsive " src="/img/trailer.gif">
+      </div>
+
 	    </a> 
 	<div class="panel panel-default">
 		<div class="text-center panel-heading">Movie Details 
@@ -243,10 +429,11 @@
 
 		</div>
 		<div style="display: none;" id="recommendation" class="common col-sm-12">
-
+<h2>Recommendations</h2>
 		</div>
 
 		<div style="display: none;" id="gallery" class="common col-sm-12 ">
+      <h2>Gallery</h2>
 		<div id="gallery_photos">
 		</div>
 
@@ -261,5 +448,24 @@
 
 <script >
 	
+    $(window).scroll(function() {
+        if ($(window).scrollTop() < 100 ){
+            $('#real_nav').removeClass('navbar-default');
+        } else {
+           $('#real_nav').addClass('navbar-default');
+        };
+    });
+
+        $('#real_nav').hover(function () {
+      
+         $('#real_nav').addClass('navbar-default');
+    });
+
+$('#real_nav').mouseleave(function(){
+  $('#real_nav').removeClass('navbar-default');
+});
+
+
+
 
 </script>

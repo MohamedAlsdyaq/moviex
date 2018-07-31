@@ -23,6 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $tvs = LibraryController::CurrentTv();
+        return view('welcome')->with('tvs', $tvs);
     }
 }

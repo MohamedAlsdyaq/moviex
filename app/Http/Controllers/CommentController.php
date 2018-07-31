@@ -82,4 +82,8 @@ class CommentController extends Controller
     {
         //
     }
+      public static function DeleteAll($id){
+        Post::where('user_id', $id)
+                ->delete();
+    }
 }

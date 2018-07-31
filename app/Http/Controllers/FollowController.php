@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Follow;
 use Illuminate\Http\Request;
-
+use Auth;
 class FollowController extends Controller
 {
     /**
@@ -12,9 +12,12 @@ class FollowController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function check_our_relationship($id)
     {
         //
+        return Follow::select('active')->
+        where(['user1' => Auth::user()->id, 'user2' => $id])
+                ->first();
     }
 
     /**
@@ -22,55 +25,88 @@ class FollowController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function follow()
     {
         //
+          Follow::updateOrCreate([
+ 'user1' => Auth::user()->id,
+ 'user2' => $id
+       ], [
+      
+       'user1' => Auth::user()->id,
+       'user2' => $id,
+       'active' => 0      
+    ]);
+    }
+        public function unfollow()
+    {
+        //
+          Follow::updateOrCreate([
+ 'user1' => Auth::user()->id,
+ 'user2' => $id
+       ], [
+      
+       'user1' => Auth::user()->id,
+       'user2' => $id,
+       'active' => 1       
+    ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function block($id)
     {
         //
+         Follow::updateOrCreate([
+ 'me' => Auth::user()->id,
+ 'user' => $id
+       ], [
+      
+       'me' => Auth::user()->id,
+       'user' => $id,
+       'active' => 2       
+    ]);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Follow  $follow
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Follow $follow)
+        public function unblock($id)
     {
         //
+        Follow::where( ['user1' => Auth::user()->id, 'user2' => $id])
+            ->delete();
+
+    }
+    public function GetFollower($id){
+       $ids =   Follow::where('user1', $id)
+       // ->where('active', 1)
+        ->pluck('user2');
+       return UserController::GetUsersById($ids);
+    }
+        public function GetFollowing($id){
+       $ids =   Follow::where('user2', $id)
+       // ->where('active', 1)
+        ->pluck('user1');
+       return UserController::GetUsersById($ids);
+    }
+             public static function followingcount($id)
+    {
+        return Follow::where('user1', Auth::user()->id)
+        ->count();
+    }
+                 public static function followercount($id)
+    {
+        return Follow::where('user2', Auth::user()->id)
+        ->count();
+    }
+                 public static function following ($id)
+    {
+        return Follow::where('user1', Auth::user()->id)
+        ->get();
+    }
+                 public static function follower ($id)
+    {
+        return Follow::where('user2', Auth::user()->id)
+        ->get();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Follow  $follow
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Follow $follow)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Follow  $follow
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Follow $follow)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
