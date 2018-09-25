@@ -6,17 +6,33 @@ use App\Show;
 use Illuminate\Http\Request;
 use Auth;
 use App\Library;
+use Tmdb\Repository\MovieRepository;
 
 class MovieController extends Controller
 {
+
+     private $movies;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct(MovieRepository $movies )
+    {
+        $this->movies = $movies;
+    }
+
+
     public function index($id)
     {
-        
+        $token  = new \Tmdb\ApiToken('54f297aa644bf4f27044771fc75cbb64');
+$client = new \Tmdb\Client($token);
+$repository = new \Tmdb\Repository\MovieRepository($client);
+ $movie = $client->getMoviesApi()->getMovie($id);
+    
+if($movie['poster_path'] == null )     
+abort(404);
         $rate = null;
 
         if(Auth::check())
@@ -36,15 +52,27 @@ class MovieController extends Controller
     public static function add($request, $id)
     {
         //
+                //
+        $token  = new \Tmdb\ApiToken('54f297aa644bf4f27044771fc75cbb64');
+$client = new \Tmdb\Client($token);
+$repository = new \Tmdb\Repository\MovieRepository($client);
+ $movie = $client->getMoviesApi()->getMovie($id);
+
          Show::updateOrCreate([
  
  'id' => $id
        ], [
       
-       'show_name' => $request['movie_name'],
+    'show_name' => preg_replace('/\"/', '\'',  $movie['title'])  ,
        'id' => $id,
-       'show_pic' => $request['movie_pic'],
-     
+       'show_pic' => $movie['poster_path'],
+       'show_header' => $movie['backdrop_path'],
+       'show_date' => $movie['release_date'],
+       'show_bio' => preg_replace('/\"/', '\'',  $movie['overview']),
+       'show_type' => 'movie',
+       'show_rating' => $movie['vote_average'],
+       'show_popularity' => $movie['popularity'],
+       
        
     ]);
     }
@@ -55,9 +83,57 @@ class MovieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function explore()
     {
-        //
+    $token  = new \Tmdb\ApiToken('54f297aa644bf4f27044771fc75cbb64');
+    $client = new \Tmdb\Client($token);
+    $repository = new \Tmdb\Repository\MovieRepository($client);
+        
+$box_office = $client->getMoviesApi()->getNowPlaying();
+$popular    = $client->getMoviesApi()->getPopular();
+$top_rated  = $client->getMoviesApi()->getTopRated();
+$upcoming   = $client->getMoviesApi()->getUpcoming();
+
+
+return View('exploremovies')->with([
+        'box_office' => $box_office, 
+        'popular' => $popular,
+        'top_rated' => $top_rated,
+        'upcoming' => $upcoming 
+]);
+
+
+    }
+
+  public function highlights($title)
+    {
+    $token  = new \Tmdb\ApiToken('54f297aa644bf4f27044771fc75cbb64');
+    $client = new \Tmdb\Client($token);
+    $repository = new \Tmdb\Repository\MovieRepository($client);
+        
+switch ($title) {
+    case 'theaters':
+     $case = 'getNowPlaying';
+        break;
+    case 'top':
+        $case = 'getPopular';
+        break;
+    case 'upcoming':
+       $case = 'getUpcoming';
+        break;
+    case 'trending':
+         $case = 'getPopular';
+        break;
+ }
+ 
+$results= $client->getMoviesApi()->$case();
+ 
+return View('highlight')->with([
+        'results' => $results
+       
+]);
+
+
     }
 
     /**
@@ -66,9 +142,12 @@ class MovieController extends Controller
      * @param  \App\Movie  $movie
      * @return \Illuminate\Http\Response
      */
-    public function show(Movie $movie)
+    public static function GetShows( $ids, $sort='show_name')
     {
         //
+        return Show::whereIn('id', $ids)
+                    ->orderBy($sort, 'asc')
+                    ->get();
     }
 
     /**

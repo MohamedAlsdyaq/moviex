@@ -20,24 +20,43 @@ class TvController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public static function add($request, $id)
+     public static function add(  $id)
     {
         //
+  $token  = new \Tmdb\ApiToken('54f297aa644bf4f27044771fc75cbb64');
+$client = new \Tmdb\Client($token);
+ 
+ $movie = $client->getTvApi()->getTvshow( $id);
+
+ 
          Show::updateOrCreate([
  
  'id' => $id
        ], [
       
-       'show_name' => $request['movie_name'],
+      'show_name' => preg_replace('/\"/', '\'',  $movie['name']),
        'id' => $id,
-       'show_pic' => $request['movie_pic'],
-       'ep_count' => $request['ep_count'],
+       'show_pic' => $movie['poster_path'],
+       'show_header' => $movie['backdrop_path'],
+       'show_date' => $movie['first_air_date'],
+       'show_bio' => preg_replace('/\"/', '\'',  $movie['overview']),
+       'show_rating' => $movie['vote_average'],
+       'show_popularity' => $movie['popularity'],
+         'show_type' => 'tv',
+       'seasons' => $movie['number_of_seasons'],
+       'ep_count' => $movie['number_of_episodes'],
        
     ]);
+         return $movie['number_of_episodes'];
     }
     public function index($id)
     {
-        
+$token  = new \Tmdb\ApiToken('54f297aa644bf4f27044771fc75cbb64');
+$client = new \Tmdb\Client($token);
+$movie = $client->getTvApi()->getTvshow( $id);
+    
+if($movie['poster_path'] == null )     
+abort(404);
         $rate = null;
 
         if(Auth::check())
@@ -46,20 +65,62 @@ class TvController extends Controller
             ->first();
 
             return View('tv')->with([
-                'rate' => $rate]);
+                'rate' => $rate,
+                'id'  => $id
+            ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function explore()
     {
-        //
+    $token  = new \Tmdb\ApiToken('54f297aa644bf4f27044771fc75cbb64');
+    $client = new \Tmdb\Client($token);
+    $repository = new \Tmdb\Repository\MovieRepository($client);
+        
+$box_office = $client->getTvApi()->getAiringToday();
+$popular = $client->getTvApi()->getPopular();
+$top_rated = $client->getTvApi()->getTopRated();
+$upcoming = $client->getTvApi()->getOnTheAir();
+
+return View('exploretv')->with([
+        'box_office' => $box_office, 
+        'popular' => $popular,
+        'top_rated' => $top_rated,
+        'upcoming' => $upcoming
+]);
+
+
     }
 
+  public function highlights($title)
+    {
+    $token  = new \Tmdb\ApiToken('54f297aa644bf4f27044771fc75cbb64');
+    $client = new \Tmdb\Client($token);
+    $repository = new \Tmdb\Repository\MovieRepository($client);
+        
+switch ($title) {
+    case 'airing_today':
+     $case = 'getAiringToday';
+        break;
+    case 'popular':
+        $case = 'getPopular';
+        break;
+    case 'top_rated':
+       $case = 'getTopRated';
+        break;
+    case 'airing':
+         $case = 'getOnTheAir';
+        break;
+ }
+ 
+$results= $client->getTvApi()->$case();
+ 
+return View('highlightTv')->with([
+        'results' => $results
+       
+]);
+
+
+    }
     /**
      * Display the specified resource.
      *

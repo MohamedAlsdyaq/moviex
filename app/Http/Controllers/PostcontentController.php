@@ -20,13 +20,16 @@ class PostcontentController extends Controller
             $media = $request[$i];
             $path = '/posts/'.$post_id;
             $filename = $i.'.jpg';
+
             //$location = public_path('posts'. DIRECTORY_SEPARATOR, $filename);
            // $media->storeAs($path, $filename);
-            Image::make($media)->fit(700, 500)->save(public_path($path. '/' . $filename));
+            Image::make($media)->resize(300, null, function ($constraint) {
+    $constraint->aspectRatio();
+})->save(public_path($path. '/' . $filename));
             $content = new Postcontent;
             $content->post_id = $post_id;
             $content->user_id = Auth::user()->id;
-            $content->content = 'posts/' . $post_id . '/' . $filename;
+            $content->content = '/posts/' . $post_id . '/' . $filename;
             $content->save();
         }
     }

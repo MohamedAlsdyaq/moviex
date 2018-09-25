@@ -14,6 +14,23 @@ class ReactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function Dedicated($id){
+
+      return View('reaction')->with([
+        'id' => $id
+      ]);
+}
+
+public function reaction($id){
+    return  Reaction::with('user')
+            ->whereId($id)
+            ->with('likes')
+               ->with('show')
+             ->orderBy('updated_at', 'desc')
+              
+          ->paginate(1); 
+
+}
     public function GetReactionsForUser($id)
     {
         //

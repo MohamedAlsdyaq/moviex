@@ -14,8 +14,14 @@ class Show extends Model
 	    public function library(){
 	  return $this->hasOne('App\Library');
 	}
+		    public function post(){
+	  return $this->hasOne('App\Post', 'id');
+	}
 		    public function favorite(){
 	  return $this->hasOne('App\Favorite');
+	}
+			    public function listentry(){
+	  return $this->hasOne('App\Listentries');
 	}
 		    public function reaction(){
 	  return $this->hasOne('App\Reaction');

@@ -19,10 +19,13 @@
 	padding-left: 40px;
 }
 
-#list_intro div{
-	margin-left: 20px;
+.live_result > p {
+	width: 80%;
+	   text-overflow: ellipsis; 
 }
-
+ .live_result:hover{
+ 	background-color: #fafafa;
+ }
 #list_entries{
 	padding: 20px;
 }

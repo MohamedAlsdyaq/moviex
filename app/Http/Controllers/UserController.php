@@ -15,13 +15,20 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     //
+        public static function getId($name)
+    {
+        
+        return User::where('name', $name)->first()->id ;
+    }
+    
     public static function GetUsersById($ids){
         return User::whereIn('id', $ids)
             ->get();
     }
     public function Settings(){
-        $blocked = BlockController::BlockedList(Auth::user()->id);
+        $blocked = BlockController::BlockedList( );
         $blocked = User::whereIn('id', $blocked)->get();
+
          return view('settings')->with('blocks', $blocked);
     }
     public function index($id)
@@ -35,14 +42,15 @@ class UserController extends Controller
     	$followercount = FollowController::followercount($id);
     	$reactioncount = ReactionController::reactioncount($id);*/
         $favs = FavoriteController::index($id);
-    	$user =  User::whereId($id)
+    	$user = User::whereId($id)->first() ;
+    	$links=\App\Link::where('user_id', $id)->get();		
     			
-    			->first() ;
 
 
     	return View('user')->with([
     		'user' => $user,
-    		 'favs' => $favs
+    		 'favs' => $favs,
+             'links' => $links
     		]);
     }
     public function destroy(){
@@ -118,12 +126,12 @@ class UserController extends Controller
         //
 
      $validator = Validator::make($request->all(), [
-           'uname' => 'bail|string|max:255',
-            'email' => 'bail|string|email|max:255|unique:users',
+           'uname' => 'string|max:255',
+            'email' => 'string|email|max:255|unique:users',
         ]);
 
         if ($validator->fails()) {
-            return redirect('/profile/update')
+            return $validator 
                         ->withErrors($validator)
                         ->withInput();
         }
@@ -163,9 +171,12 @@ public function messages()
 }
 public function CreateLink(Request $request)
 {
-    DB::table('links')->insert(
-    ['user_id' => Auth::user()->id, 'vendor' => $request['vendor'], 'link' => $request['link']]
-);
+
+    \App\Link::updateOrCreate([
+'user_id' => Auth::user()->id, 'vendor' => $request['vendor']
+],[
+'user_id' => Auth::user()->id, 'vendor' => $request['vendor'], 'link' => $request['link']
+]);
 }
 
 }

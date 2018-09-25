@@ -204,7 +204,7 @@ class Builder
         if ($column instanceof Closure) {
             $query = $this->model->newQueryWithoutScopes();
 
-            $column($query);
+            $column($query);-
 
             $this->query->addNestedWhereQuery($query->getQuery(), $boolean);
         } else {

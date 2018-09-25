@@ -1,8 +1,12 @@
-.tags {
+timeline-centered.tags {
   list-style: none;
   margin: 0;
   overflow: hidden; 
   padding: 0;
+}
+.timeline-centered h6{
+  font-weight: normal !important;
+  font-size: 12px !important;
 }
 
 .tags li {
@@ -10,7 +14,7 @@
 }
 
 .tag {
-  background: #D6D6D6;
+  background:  white;
   border-radius: 3px 0 0 3px;
   color: #999;
   display: inline-block;
@@ -80,8 +84,9 @@ background-color:rgba(192,192,192,0.3);
 .butons{
   border: 2px solid  #f5f8fa;
   border-radius: 2%;
-    text-align: center
-    font-size : 1px;
+    text-align: center;
+ 
+    font-weight: bold;
     max-height: 20px;
     margin-bottom : -2px;
     margin-top: 5px;
@@ -191,31 +196,6 @@ justify-content: center;
 
 
 
-
-@media only screen and (max-width: 800px) {
-    #poster {
-       margin-top: -380px;
-       margin-bottom: 100px;
-    }
-    .white_section{
-
-    }
-}
-@media only screen and (max-width: 995) {
-    #poster {
-      transform: scale(0.5);
-    }
-    .white_section{
-
-    }
-}
-@media only screen and (max-width: 400px) {
-
-    .white_section{
-  height: 150px;
-    
-    }
-}
 
 .cost{
   min-height:450px;

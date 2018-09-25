@@ -1,0 +1,68 @@
+.liked{
+	padding: 1%;
+	margin: 3%;
+	margin-left: 20%;
+	background-color: white;
+}
+.liked:hover{
+	background-color: #fcfdff;
+	cursor: pointer;
+}
+
+#back_to_top{
+
+	margin-left: 40%;
+	
+	 bottom: 0%;
+}
+
+.grey{
+    color: #a5a5a5;
+}
+.write_comment{
+	margin: 5%
+}
+.mention_avatar{
+	margin-top: 40%
+}
+.display_tags{
+	margin-right: 3%;
+}
+.notification_container{
+	border-radius: 5px;
+	background-color: white;
+	 margin: auto;
+    width: 50%;
+    display: block;
+    justify-content: center;
+  
+   padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 14px;
+}
+
+.time{
+	color: #657786;
+white-space: nowrap;
+}
+.post_thumnail{
+	border-radius: 5px;
+
+	border : 1px solid #fafafa;
+	cursor: pointer;
+}
+.post_thumnail:hover{
+	background-color: #fafafa;
+	border: 1px solid black;
+}
+.noti{
+	width: 100%;
+	min-height: 70px;
+	margin: 2% 0 1% 5%;
+}
+.card-title{
+	font-size: 18px;
+	margin: 15px 0px 0px 15px;
+	font-weight: 500;
+	text-align: center;
+}

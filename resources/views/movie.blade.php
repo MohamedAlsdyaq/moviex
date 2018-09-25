@@ -40,9 +40,7 @@
 		}
 	</style>
 </head>
-<script type="text/javascript">
-	    $('#real_nav').removeClass('navbar-default');
-</script>
+ 
 
 <input id="movie_name" type="hidden" value="" >
 <input id="movie_pic" type="hidden" value="" >
@@ -278,25 +276,30 @@
 </div>
 
 @endsection 
+<script type="text/javascript">
+  
+ get_post({{$id}});
+ document.addEventListener('DOMContentLoaded', function(){ 
 
-<script >
-	
-    $(window).scroll(function() {
-        if ($(window).scrollTop() < 100 ){
-            $('#real_nav').removeClass('navbar-default');
-        } else {
-           $('#real_nav').addClass('navbar-default');
-        };
+
+ $(window).on('scroll', function() {
+
+
+
+      var paginatr = window.moviex_global_next_page;
+      paginatr = paginatr.split("=");
+      paginatr = paginatr[1];
+      console.log(paginatr);
+     
+        /* Check the location of each desired element */
+  if( $('.no_more').isFullyVisible() ){
+    $('.no_more').removeClass('no_more');
+    get_post(  window.moviex_global_next_page);
+  
+  }
+    
     });
-        $('#real_nav').hover(function () {
-      
-         $('#real_nav').addClass('navbar-default');
+
     });
-
-$('#real_nav').mouseleave(function(){
-  $('#real_nav').removeClass('navbar-default');
-});
-
-
-
 </script>
+<script src="/js/header.js"></script>

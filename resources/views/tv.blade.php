@@ -37,40 +37,20 @@
 			height: 300px;
 			width: 100%;
 		}
+    .white_section{
+      margin-top: 150;
+    }
 	</style>
 </head>
 <script type="text/javascript">
-	    $('#real_nav').removeClass('navbar-default');
+	   
 </script>
 <input id="movie_name" type="hidden" value="" >
 <input id="movie_pic" type="hidden" value="" >
 <input id="ep_counts" type="hidden" value="" >
 <input id="reported_post" type="hidden">
 
-<div class="modal fade" id="report_modal" tabindex="-1" role="dialog" aria-labelledby="purchaseLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-               
-                <div class="modal-body">
-                  <h4>Please give a reason for reporting this content. </h4>
-     <form id="report_form">
-     <select name="reason" style="width: 100%"  id="inputState" placeholder="Reason" class="form-control">
-        <option >Spoiler</option>
-        <option>Offensive</option>
-        <option>Bullying</option>
-        <option>Explicit Content</option>
-         <option>Other</option>
-      </select>
-      <input type="hidden" name="id" id="report_id" value="">
-      <br>
-      <textarea name="comment" onkeydown="check_length(this)" placeholder="What's wrong with this content? (Optional)" class="form-control report_reason" rows="3" style="width: 100%" ></textarea><br>
-    </form>
-                </div>
-               <button  style="color: white !important; display: block; margin: auto; width: 70%" class="disabled btn btn-lg btn-block reporting_button" >Report </button>
-               <br>
-            </div>
-        </div>
-    </div>
+
 
 
 <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"
@@ -93,8 +73,8 @@
   <input id="entry_id" type="hidden" name="id"  value="{{$rate['id']}}">   
   @endif
   <div class=" row">
-    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Status</label>
-    <div  class="col-sm-8">
+    <label for="colFormLabelSm" class="col-sm-2 col-xs-2 col-md-2 col-form-label col-form-label-sm">Status</label>
+    <div  class="col-sm-8 col-xs-8 col-md-8">
         <select name="status" style="color: black !important" style="" class="butons custom-select mr-sm-2" id="inlineFormCustomSelect">
         <option value="watching" name="started"  >Currently watching</option>
         <option value="completed" name="completed" >Completed</option>
@@ -123,8 +103,8 @@ if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
  ?>
  <br>
   <div class="f row">
-    <label for="colFormLabel" class="col-sm-2 col-form-label">Progress</label>
-    <div  class="col-sm-8">
+    <label for="colFormLabel" class="col-sm-2 col-sm-2 col-xs-2 col-md-2 col-form-label">Progress</label>
+    <div  class="col-sm-8  col-xs-8 col-md-8">
 
   <div class=" ">
     
@@ -140,8 +120,8 @@ if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
   <br>
   <?php } ?>
   <div class="f row">
-    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Rewatch Count</label>
-    <div class="col-sm-8">
+    <label for="colFormLabelLg" class="col-sm-2 col-lg-2 col-form-label col-form-label-lg">Rewatch Count</label>
+    <div class="col-sm-8 c-2 col-xs-8 col-md-8">
    <select name="rewatch" style="color: black !important" class="butons selectpicker">
       <option  data-name="0" >0</option>
       <option data-name="1" >1</option>
@@ -151,22 +131,22 @@ if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
   </div>
   <br>
   <div class=" row">
-    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Started Date</label>
-    <div class="col-sm-8">
+    <label for="colFormLabelLg" class="col-sm-2 col-sm-2 col-xs-2 col-md-2 col-form-label col-form-label-lg">Started Date</label>
+    <div class="col-sm-8 col-sm-2 col-xs-8 col-md-8">
        <input placeholder="{{$started_at}}" name="started_at"    type="date"  class="form-control " >
     </div>
   </div>
   <br>
     <div class=" row">
-    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Finished Date</label>
-    <div class="col-sm-8">
+    <label for="colFormLabelLg" class="col-sm-2 col-xs-2 col-md-2 col-form-label col-form-label-lg">Finished Date</label>
+    <div class="col-sm-8 col-xs-8 col-md-8">
             <input placeholder="{{$finished_at}}" value="" name="finished_at"   type="date"  class="form-control " >
     </div>
   </div>
   <br>
   <div class=" row">
-    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Notes</label>
-    <div class="col-sm-8">
+    <label for="colFormLabelLg" class="col-sm-2 col-xs-2 col-md-2 col-form-label col-form-label-lg">Notes</label>
+    <div class="col-sm-8 col-xs-8 col-md-8">
       <textarea name="note" style=" resize: none" class="form-control" id="" rows="3"> {{$note}} </textarea>
     </div>
   </div>
@@ -231,7 +211,7 @@ if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
 
 
 </div>
-<div class="white_section col-xs-12" >
+<div class="white_section col-xs-12 " >
 <div style="margin-left: 25%" class="tab">
   <button class="current_tab tablinks" onclick="change_section(event, 'summary')">Summary</button>
   <button  s class="tablinks" onclick="change_section(event, 'gallery', 'tv')">Gallery</button>
@@ -242,7 +222,7 @@ if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
 </div>
 <div class="">
 
-<div  class="col-sm-3 col-xs-12 row " > 
+<div  class="col-sm-3 col-xs-3 row " > 
 	<div class="col-sm-10 col-xs-10" >
  <img id="poster" class="img-responsive"><br>
             
@@ -272,9 +252,13 @@ if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
 	<i data-rating="5" class="fa stars fa-star-o"></i>
 	</div>
 	<script >
-
+<?php
+$r = 0;
+if(!is_null($rate['rate']))
+$r = $rate['rate'];
+?>
 	console.log({{$rate["rate"]}})
-	for(i={{$rate["rate"]}}; i>0; i--){
+	for(i={{$r}}; i<0; i--){
 	$("#rating_section").find(`[ data-rating='`+i+`']`) 
 	.addClass('selected fa-star').removeClass('fa-star-o');
 	}
@@ -375,7 +359,7 @@ if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
             	 </div>
             	</div>
             	
-            	 <div class="col-sm-4 col-md-4 col-xs-12" > 
+            	 <div class="col-sm-4 col-md-4 col-xs-3" > 
 
 
 		<a id="video" href="" data-lity>
@@ -445,27 +429,30 @@ if (strpos($url,'tv') !== false || strpos($url,'movie') !== false) {
 </div>
 
 @endsection 
+<script type="text/javascript">
+  
+ get_post({{$id}});
+ document.addEventListener('DOMContentLoaded', function(){ 
 
-<script >
-	
-    $(window).scroll(function() {
-        if ($(window).scrollTop() < 100 ){
-            $('#real_nav').removeClass('navbar-default');
-        } else {
-           $('#real_nav').addClass('navbar-default');
-        };
+
+ $(window).on('scroll', function() {
+
+
+
+      var paginatr = window.moviex_global_next_page;
+      paginatr = paginatr.split("=");
+      paginatr = paginatr[1];
+      console.log(paginatr);
+     
+        /* Check the location of each desired element */
+  if( $('.no_more').isFullyVisible() ){
+    $('.no_more').removeClass('no_more');
+    get_post(  window.moviex_global_next_page);
+  
+  }
+    
     });
 
-        $('#real_nav').hover(function () {
-      
-         $('#real_nav').addClass('navbar-default');
     });
-
-$('#real_nav').mouseleave(function(){
-  $('#real_nav').removeClass('navbar-default');
-});
-
-
-
-
 </script>
+<script src="/js/header.js"></script>

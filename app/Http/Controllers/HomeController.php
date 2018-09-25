@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Auth;
 class HomeController extends Controller
 {
     /**
@@ -21,9 +21,22 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public static function index()
     {
+        $groups = GroupentriesController::getGroups(Auth::user()->id);
+        $lists = LaistController::GetListForUser(Auth::user()->id);
+    
         $tvs = LibraryController::CurrentTv();
-        return view('welcome')->with('tvs', $tvs);
+        return view('welcome')->with(
+            [
+                'tvs' => $tvs,
+                'groups' => $groups,
+                'lists' => $lists
+    ]);
+    }
+
+      public static function explore()
+    {
+     
     }
 }

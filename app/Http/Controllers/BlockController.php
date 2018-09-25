@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Block;
 use Illuminate\Http\Request;
-
+use Auth;
 class BlockController extends Controller
 {
     /**
@@ -12,9 +12,12 @@ class BlockController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public static function BlockedList($id){
-        return Block::where('me', $id)
-                ->pluck('user');
+    public static function BlockedList(){
+        if(Auth::guest())
+            return 0;
+        return \App\Follow::where('user1', Auth::user()->id)
+                ->where('active', 2)
+                ->pluck('user2');
 
 
     }

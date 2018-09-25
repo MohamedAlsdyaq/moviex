@@ -223,7 +223,7 @@ if (r == true) {
 
   }
 
-  function update_profile(e, button){
+  function update_profile(e){
   
     data = {
             uname : $('#uname').val(),
@@ -270,7 +270,7 @@ $.each( $('.reset'), function(e){
   }
 $('#Unblock').click(function(e){
 
-  $.get( "/user/unblock/"+$(e).attr('data-id'), function( ajax ) {
+  $.get( "/unblock/"+$(e).attr('data-id'), function( ajax ) {
  
   location.reload();
 });

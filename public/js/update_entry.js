@@ -7,14 +7,11 @@ $.ajaxSetup({
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
 }); 
-var dest = 'movie';
-    if(window.location.href.indexOf("tv") > -1) {
-      var dest = 'tv';
-    } 
+ 
 $.ajax({
 
     //do a call to the list table and add the movie as 
-    url: '/update/'+dest+'/lib',
+    url: '/update/tv/lib',
     data: data,
     type: 'POST',
     beforeSend: function(){

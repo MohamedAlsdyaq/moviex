@@ -4,14 +4,14 @@
 }
 .white_section{
   width: 100%;
-    margin-top: 150px;
+    margin-top: 60px;
   
   background-color: white;
   height: 50px;
 }
 .white_section2{
   width: 100%;
-   margin-top: 70px;
+   margin-top: 20px;
   
   background-color: white;
   min-height: 50px;
@@ -39,7 +39,7 @@ div.tab button:hover{
 	  color:black !important;
 }
 .tab{
-	margin-left: 20%;
+	margin-left: 10%;
 }
 
 @media only screen and (max-width: 600px) {
@@ -64,7 +64,7 @@ div.tab button:hover{
 }
 
 .custom_btns{
-    opacity: 0.4;
+    
     border: 2px solid  #f5f8fa;
     border-radius: 2%;
     margin-top: 5px;
@@ -73,6 +73,14 @@ div.tab button:hover{
     margin-left: auto;
     color: black;
     width: 100%;
+}
+.custom_btns:not(select){
+      opacity: 0.2;
+    font-family: "Open Sans",sans-serif;
+    font-weight: 600;
+font-size: 14px;
+border-radius: 0%;
+ 
 }
 .custom_btns:hover{
     opacity: 1;
@@ -142,7 +150,9 @@ div.tab button:hover{
 #lib_poster_container{
     
 }
+.reaction{
 
+}
 .reaction_container{
   border-radius: 5px;
   background-color: black;
@@ -150,7 +160,7 @@ div.tab button:hover{
   background-position: 100% 50% !important;
   background-size: cover !important;
   padding: 3%;
-  height: 370px;
+  height: 270px;
   margin-right: 15px;
 color: white;
   position:relative
@@ -724,7 +734,7 @@ h1{ text-align:center}
  }
 
  ._4-u8 {
-  margin-left: -15px;
+ box-shadow: 0 1px 4px rgba(201, 201, 201, 0.85);
    width: 100% !important;
   background-color: #fff;
 }
@@ -969,4 +979,40 @@ div._2ix0 {
 .fav_container img{
   height: 59px !important;
   margin-right: 5px;
+}
+
+    
+
+    .edit-btn{
+      text-align: center;
+/* default fallback */
+      float: left;
+}
+
+.edit-btn{
+  background-color: rgba(255, 255, 255, 0.2);
+   border-radius: 10px;
+   border: 2px;
+  cursor: pointer;
+  border-radius: 2px;
+     transition: .3s ease;
+  color: white;
+ height: 33px;
+  width: 105px;
+ padding-top: 6px;
+  text-align: center;
+  font-size: 13px;
+  transition: .5 ease-in;
+}
+.edit-btn:hover{
+  background-color: white;
+  color: black  
+}
+
+.account_info{
+ position: absolute;
+    left: 0;
+    top: 250px;
+    width: 70%;
+ 
 }

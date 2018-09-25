@@ -44,14 +44,20 @@ class LibraryController extends Controller
        'type' => 0
        
     ]);
+      
   HistoryController::add( $id->id, $request);
   
 }
 
      public function AddTv(Request $request, $id)
     {
+
     $id = (int) $id;        
-  TvController::add($request, $id);
+$epsidoes =  TvController::add($request, $id);
+ $ep_count = 0;
+
+if($request['status'] == 'completed')
+        $ep_count = (int) $epsidoes;
 
    $lib_id =    Library::updateOrCreate([
      'show_id' => $id,
@@ -63,12 +69,13 @@ class LibraryController extends Controller
        'show_id' => $id,
        'status' => $request['status'],
        'rate' => $request['score'],
-       'type' => 1
+       'type' => 1,
+       'ep_count' => $ep_count
        
     ]);
 
   HistoryController::add( $lib_id->id, $request);
-  return  $id ;   
+  return  $ep_count ;   
     }
 
     /**
@@ -79,14 +86,13 @@ class LibraryController extends Controller
      */
     public function UpdateMovie(Request $request)
     {
-        
+    
      $entry =   Library::find($request['id']);
 
      $entry->status = $request['status'];
      $entry->started_at = $request['started_at'];
      $entry->finished_at = $request['finished_at'];
-     $entry->rewatch_count = $request['rewatch'];
-     
+ 
      $entry->note = $request['note'];
 
      $entry->save();
@@ -100,12 +106,14 @@ class LibraryController extends Controller
      */
     public function UpdateTv(Request $request)
     {
-     $entry =   Library::find($request['id']);
+       
 
+     $entry =   Library::find($request['id']);
+return $entry;
      $entry->status = $request['status'];
      $entry->started_at = $request['started_at'];
      $entry->finished_at = $request['finished_at'];
-     $entry->rewatch_count = $request['rewatch'];
+ 
      $entry->ep_count = $request['progress'];
      $entry->note = $request['note'];
 
@@ -134,21 +142,25 @@ class LibraryController extends Controller
         }
     }
  
-    public function CheckSpoiler($id)
+    public function CheckSpoiler(Request $request, $id)
     {
         if(Auth::guest())
-            return 0;
+            return false;
 
-        return Library::where('user_id', Auth::user()->id)
+        $ep = Library::select('ep_count')->where('user_id', Auth::user()->id)
                 ->where('show_id', $id)
                 ->first()->ep_count;
+        if($ep < $request['ep'])
+            return 1;
+
+        return 0;
     }
 
     public function GetLibraryMovies($id){
         return Library::where(['type' =>  0,'user_id' =>  $id])
         ->orderBy('updated_at', 'desc')
           ->with('show')
-        ->paginate(20);
+        ->paginate(15);
     }
         public function GetLibraryTv(Request $request, $id, $sort='created_at', $status=['watching', 'dropped', 'completed']){
            
@@ -158,11 +170,14 @@ class LibraryController extends Controller
             $sort = $request['sort'];
  
         return Library::where(['type' =>  1,'user_id' => $id])
-         ->with('show')
-         ->whereIn('status', $status)
-        ->orderBy($sort, 'desc')
 
-        ->paginate(1);
+         ->join('shows', 'shows.id', '=', 'libraries.show_id')
+         ->select('libraries.*',   'shows.show_name', 'shows.id as show_id', 'shows.show_pic', 'shows.ep_count as show_ep_count', 'shows.show_popularity', 'shows.show_bio', 'shows.show_date', 'shows.show_rating' )
+        ->orderBy($sort, 'ASC')
+         ->whereIn('status', $status)
+        ->orderBy('shows.show_name', 'ASC')
+
+        ->paginate(15);
     }
             public static function GetUserEntries($id){
     return Library::where('user_id', $id)

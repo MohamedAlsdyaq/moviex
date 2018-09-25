@@ -31,7 +31,7 @@ $.ajax({
             },
             success: function(ajax) {
                      //      $('.disabled').addClass('disabled');
-    get_post(ajax.id);
+    
               console.log(ajax);
                 console.log(ajax);
 var pic = 'http://image.tmdb.org/t/p/w342'+ajax.poster_path
@@ -47,7 +47,7 @@ var vote = ajax.vote_count;
 var popularity = ajax.popularity;
 var date = ajax.first_air_date;
 
-if( typeof ajax.videos.results[0].key !== 'undefined')
+if( typeof ajax.videos.results[0] !== 'undefined')
 var video = 'https://www.youtube.com/watch?v='+ajax.videos.results[0].key;
  
 var tags = ajax.keywords.results;
@@ -68,7 +68,7 @@ for(i=0; i<ajax.genres.length; i +=1){
     if(typeof tags  != 'undefined'){
     console.log(tags[0].name)
   for(i=0; i<tags.length; i++){
-          $('#tagz').append(' <li><span class="tag">'+tags[i].name+'</span></li>')
+          $('#tagz').append('<a style="color: black" href="/search/tv?keywords='+tags[i].id+'" > <li><span class="tag">'+tags[i].name+'</span></li> </a>')
    }          
     }
 

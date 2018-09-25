@@ -70,13 +70,48 @@ class LikeController extends Controller
     public function LikePost($id)
     {
         //
+      $user =  PostController::GetUserByPostId($id);
         if(Auth::guest())
             return 0;
         $like = new Like;
         $like->user_id = Auth::user()->id;
         $like->post_id = $id;
+        $like->type = 'post';
         $like->save();
+
+ NotificationController::store($user, $id);
+
         return 1;
+    }
+
+    public function LikeComment($id)
+    {
+        //
+         $user =  PostController::GetUserByPostId($id);
+        if(Auth::guest())
+            return 0;
+        $like = new Like;
+        $like->user_id = Auth::user()->id;
+        $like->post_id = $id;
+        $like->type = 'comment';
+        $like->save();
+       NotificationController::store($user, $id);
+        return 1;
+    }
+
+     public function LikeReaction($id)
+    {
+         $user =  PostController::GetUserByPostId($id);
+        //
+        if(Auth::guest())
+            return 0;
+        $like = new Like;
+        $like->user_id = Auth::user()->id;
+        $like->post_id = $id;
+         $like->type = 'reaction';
+        $like->save();
+        NotificationController::store($user, $id);
+       return 1;
     }
 
     /**

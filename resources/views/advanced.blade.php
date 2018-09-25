@@ -190,6 +190,12 @@ All
 
 <div style="margin: 4em" class="regular-slider"></div>
 <script>
+    movie_id = null;
+
+ 
+
+
+ 
     function make_me_active(e){
        
        $('.active').removeClass('active');
@@ -209,7 +215,7 @@ var regularSlider = document.querySelector('.regular-slider')
 var dollarPrefixFormat = wNumb({prefix: '$', decimals: 0})
 var slider = noUiSlider.create(regularSlider, {
     // two handles
-    start: [0, 2019],
+    start: [2000, 2019],
     // they are connected
     	
   connect: true,
@@ -239,10 +245,12 @@ regularSlider.noUiSlider.on('update', function ( values, handle ) {
 		console.log(values[handle]);
 		marginMax.innerHTML = Math.ceil(values[handle]);
         to = Math.ceil(values[handle]);
+        if(movie_id == null)
         adv_search();
 	} else {
 		marginMin.innerHTML = Math.ceil(values[handle]);
         froms = Math.ceil(values[handle]);
+          if(movie_id == null)
         adv_search();
 	}
 });
@@ -252,7 +260,7 @@ var slider3 = document.querySelector('.slider')
  
 var slider2 = noUiSlider.create(slider3, {
     // two handles
-    start: [0, 100],
+    start: [70, 100],
     // they are connected
     	
   connect: true,
@@ -282,11 +290,13 @@ slider3.noUiSlider.on('update', function ( values, handle ) {
 		console.log(values[handle]);
 		max.innerHTML = Math.ceil(values[handle]);
         vote_to = Math.ceil(values[handle]  / 10 );
+          if(movie_id == null)
         adv_search();
 
 	} else {
 		min.innerHTML = Math.ceil(values[handle]);
         vote_from = Math.ceil(values[handle] / 10 );
+          if(movie_id == null)
         adv_search();
 	}
 });
@@ -296,7 +306,7 @@ var slider4 = document.querySelector('.slider2')
  
 var slider5 = noUiSlider.create(slider4, {
     // two handles
-    start: [0, 150],
+    start: [10, 250],
     // they are connected
         
   connect: true,
@@ -310,8 +320,8 @@ var slider5 = noUiSlider.create(slider4, {
     },
     tooltip: true,
     // start and end point of the slider - we are going to calculate that later based on a set of items
-    range: {'min':  0,
-            'max':  100},
+    range: {'min':  10,
+            'max':  250},
  
 });
  
@@ -326,11 +336,13 @@ slider4.noUiSlider.on('update', function ( values, handle ) {
         console.log(values[handle]);
         max.innerHTML = Math.ceil(values[handle]);
         runtime_to = Math.ceil(values[handle]    );
+          if(movie_id == null)
         adv_search();
 
     } else {
         min.innerHTML = Math.ceil(values[handle]);
         runtime_from = Math.ceil(values[handle]   );
+          if(movie_id == null)
         adv_search();
     }
 });
@@ -377,5 +389,6 @@ function radio(e){
       $(e).html($(e).text() + '<i class="fas fa-check"></i>');
        $(e).removeClass('hoverable');
 }
+ 
 </script>
 @endsection

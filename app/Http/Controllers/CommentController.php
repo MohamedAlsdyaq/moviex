@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Comment;
 use Illuminate\Http\Request;
-
+use Auth;
 class CommentController extends Controller
 {
     /**
@@ -12,9 +11,24 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+ public static function GetUserByComId($id){
+
+  return Comment::select('user_id')->whereId($id)->first()->user_id;
+
+
+ }
+ public function report(Request $request)
     {
         //
+    
+        DB::table('reports')->insert(
+      [
+        'post_id' => $request['id'],
+        'comment' => $request['comment'],
+        'type'    => $request['type'],
+        'reason' => $request['reason'] 
+        ]
+        );
     }
 
     /**
@@ -22,9 +36,23 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create(Request $request)
+    { 
+    
+        $post = new comment;
+        $post->user_id = Auth::user()->id;
+        $post->post_id = $request['post'];
+        $post->content = $request['comment'];
+        $post->save();
+
+ $tags = SearchController::SearchString($request['comment'], '@');
+        if($tags)
+        NotificationController::store($tags, $request['post'], 'mention');
+   
+     $user =  PostController::GetUserByPostId($request['post']);      
+  NotificationController::store($user, $request['post'], 'comment');
+
+
     }
 
     /**
@@ -44,9 +72,15 @@ class CommentController extends Controller
      * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function getCommentsforPost($p_id)
     {
-        //
+        return Comment::where('post_id', $p_id)
+                ->with('replies')
+                 ->with('likes')
+                ->with('user')     
+             ->orderBy('updated_at', 'desc')
+             ->get();
+           
     }
 
     /**
@@ -86,4 +120,11 @@ class CommentController extends Controller
         Post::where('user_id', $id)
                 ->delete();
     }
+        public function delete_parent(Request $request){
+ 
+$post =  Comment::find($request['id']);
+$post->delete(); 
+    }
+ 
+
 }

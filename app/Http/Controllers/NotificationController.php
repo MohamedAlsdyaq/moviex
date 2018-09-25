@@ -4,17 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Notification;
 use Illuminate\Http\Request;
-
+use Auth;
 class NotificationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function get()
     {
         //
+        
+      return  $notis = Notification::where('user_id', Auth::user()->id)->with('post.user')
+            ->with('user')
+      
+        ->orderBy('created_at', 'desc')
+        ->get();
+       
+         
+   
+    }
+      
+        public function index()
+    {
+        //
+        
+         $notis = Notification::where('user_id', Auth::user()->id)
+    -> with('post.user')
+            ->with('user')
+      
+        ->orderBy('created_at', 'desc')
+        ->get();
+       
+         
+       return View('notification')->with([
+        'notifications' => $notis
+
+       ]);
     }
 
     /**
@@ -28,14 +50,22 @@ class NotificationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in DB.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public static function store($user_id, $post_id, $type = 'Like')
     {
-        //
+          if(is_string($user_id[0]))
+        $user_id = UserController::getId($user_id[0]);
+
+        $notification = new Notification;
+        $notification->post_id = $post_id;
+        $notification->liker_id = Auth::user()->id;
+        $notification->user_id = $user_id;
+        $notification->type    = $type;
+        $notification->save();
     }
 
     /**
@@ -44,9 +74,12 @@ class NotificationController extends Controller
      * @param  \App\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function show(Notification $notification)
+    public function show()
     {
         //
+        return Notification::where('user_id', Auth::user()->id)
+        ->where('saw', 0)
+        ->count();
     }
 
     /**
@@ -55,21 +88,25 @@ class NotificationController extends Controller
      * @param  \App\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function edit(Notification $notification)
+    public function edit( $notification)
     {
         //
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in db.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Notification $notification)
+    public function update()
     {
         //
+        Notification::where('saw', 0)
+        ->where('user_id', Auth::user()->id)
+        ->update(['saw' => 1]);
+       
     }
 
     /**
@@ -78,7 +115,7 @@ class NotificationController extends Controller
      * @param  \App\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Notification $notification)
+    public function destroy( $notification)
     {
         //
     }

@@ -35,3 +35,35 @@ document.getElementById('reaction').style.display='none';
 console.log(reaction);
 
 }
+
+function delete_reaction(id){
+    var data = {
+        id: id,
+        
+    }     
+$.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+}); 
+$.ajax({
+
+    //do a call to the list table and add the movie as 
+    url: '/reaction/delete',
+    data: data,
+    type: 'POST',
+    beforeSend: function(){
+        
+   
+    }, 
+    success: function(d){
+        console.log(d);
+
+  check('Reaction has been deleted!');
+  $('#reaction_'+id).fadeOut();
+        
+    }
+    
+}); // end $.ajax()
+
+}

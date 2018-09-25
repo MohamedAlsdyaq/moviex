@@ -10,6 +10,42 @@ var generes = [];
 var keywords = [];
 var runtime_from = '';
 var runtime_to = '';
+var u = window.location.href;
+if(window.location.href.indexOf("?") > -1) {
+  u = u.split('?');
+  data = u[1].split('=');
+  var setting = data[0];
+  var id = data[1];
+ 
+  eval(setting).push(id);
+  
+}
+if(window.location.href.indexOf("?q") > -1) {
+  u = u.split('?q=');
+  var id = u[1];
+ 
+  nor_search(id, 10);
+  
+}
+function themes(id){
+    console.log(id);
+   $.ajax({
+            type: 'GET',
+            url:'https://api.themoviedb.org/3/search/keyword?query='+id+'&api_key=54f297aa644bf4f27044771fc75cbb64&page=1' ,
+            async: false,
+            jsonpCallback: 'testing',
+            contentType: 'application/json',
+            dataType: 'jsonp',
+            success: function(ajax) {
+              console.log('hai'+ajax.results[0].id);
+              keywords.push(ajax.results[0].id);
+              adv_search();
+
+            }
+          });
+ 
+
+}
 
 function nor_search(query, wait){
   query = query.value;
@@ -37,7 +73,7 @@ function nor_search(query, wait){
 
     heart = "fa heart fa-heart"; 
    // style = ' style=`  overflow: hidden;    text-overflow: ellipsis;     white-space: nowrap; height: 20px; `';
-  $('.searching_results').append('<div data-toggle="popover" data-placement="left" data-original-title="<h6>'+data[i].original_name + '<span> '+ get_year(data[i].first_air_date)+'</span></h6><h6><span style=&quot;float:left;color:red;margin-right:2px;;&quot; class=&quot; fa fa-heart&quot; ></span>  popularity: '+Math.round(data[i].popularity)+'<sp style=&quot;float:right;&quot; ><span style=&quot;color:yellow;margin:2px;&quot; class=&quot;fa fa-star&quot; ></span>   Av Rating : '+data[i].vote_average+'</sp></h6>" data-content="<div ><h6>'+bio+'</h6></div>" onclick="go_to_page("/movie/'+data[i].id+'")" class="search_poster"> <div id="searc_poster_content" style=" background-image: url(http://image.tmdb.org/t/p/w154'+data[i].poster_path+');" > <div class="bottom dropdown"> <a class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Add to library </a>  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4"><li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watching`, null);" >Watching</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `completed`, null);" >Completed</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watchlist`, null);" class="dropdown-item" type="button">watch List</a> </li> </ul></div></div><div class="ellipsis"><a href="/tv/'+data[i].id+'"><h6 >'+data[i].original_name+'</h6></a></div></div>');
+  $('.searching_results').append('<div data-toggle="popover" data-placement="left" data-original-title="<h6>'+data[i].original_name + '<span> '+ get_year(data[i].first_air_date)+'</span></h6><h6><span style=&quot;float:left;color:red;margin-right:2px;;&quot; class=&quot; fa fa-heart&quot; ></span>  popularity: '+Math.round(data[i].popularity)+'<sp style=&quot;float:right;&quot; ><span style=&quot;color:yellow;margin:2px;&quot; class=&quot;fa fa-star&quot; ></span>   Av Rating : '+data[i].vote_average+'</sp></h6>" data-content="<div ><h6>'+bio+'</h6></div>" onclick="go_to_page("/movie/'+data[i].id+'")" class="search_poster"> <div id="searc_poster_content" style=" background-image: url(http://image.tmdb.org/t/p/w154'+data[i].poster_path+');" > <div class="bottom dropdown"> <a class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Add to library </a>  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4"><li role="presentation"><a role="menuitem" tabindex="-1" href="" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watching`, null, '+data[i].ep_count+');" >Watching</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1"   onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `completed`, null, '+data[i].ep_count+');" >Completed</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1"    onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watchlist`, null, '+data[i].ep_count+');" class="dropdown-item" type="button">watch List</a> </li> </ul></div></div><div class="ellipsis"><a href="/tv/'+data[i].id+'"><h6 >'+data[i].original_name+'</h6></a></div></div>');
     }
     if(data.length <= 0)
        $('.searching_results').html('<div  ><h3 class="text_center" > No Results Found .. </h3> </div>');
@@ -49,7 +85,7 @@ function nor_search(query, wait){
 }, wait);
 }
 function adv_search(){
- 
+ console.log(keywords);
 window.moviex_global_url = 'https://api.themoviedb.org/3/discover/tv?api_key=54f297aa644bf4f27044771fc75cbb64&language=en-US&sort_by='+sort+'.desc'+certification+ adult+'&include_video=false&with_genres='+generes+ '&with_keywords=' +keywords+'&vote_average.gte='+vote_from+'&vote_average.lte='+vote_to+'&first_air_date.gte='+froms+'&first_air_date.lte='+to+'&with_runtime.gte='+runtime_from+'&with_runtime.lte='+runtime_to+'&page=1'; 
 console.log(generes);
  console.log(window.moviex_global_url);
@@ -74,7 +110,7 @@ $.ajax({
     if( data[i] > 1)
       sesns = '(Seasons)';
    // style = ' style=`  overflow: hidden;    text-overflow: ellipsis;     white-space: nowrap; height: 20px; `';
-  $('.searching_results').append('<div data-toggle="popover" data-placement="left" data-original-title="<h6>'+data[i].original_name + '<span> '+ get_year(data[i].first_air_date)+'</span></h6><h6><span style=&quot;float:left;color:red;margin-right:2px;;&quot; class=&quot; fa fa-heart&quot; ></span>  popularity: '+Math.round(data[i].popularity)+'<sp style=&quot;float:right;&quot; ><span style=&quot;color:yellow;margin:2px;&quot; class=&quot;fa fa-star&quot; ></span>   Av Rating : '+data[i].vote_average+'</sp></h6>" data-content="<div ><h6>'+bio+'</h6></div>" onclick="go_to_page("/movie/'+data[i].id+'")" class="search_poster"> <div id="searc_poster_content" style=" background-image: url(http://image.tmdb.org/t/p/w154'+data[i].poster_path+');" > <div class="bottom dropdown"> <a class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Add to library </a>  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4"><li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watching`, null);" >Watching</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `completed`, null);" >Completed</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watchlist`, null);" class="dropdown-item" type="button">watch List</a> </li> </ul></div></div><div class="ellipsis"><a href="/tv/'+data[i].id+'"><h6 >'+data[i].original_name+'</h6></a></div></div>');
+  $('.searching_results').append('<div data-toggle="popover" data-placement="left" data-original-title="<h6>'+data[i].original_name + '<span> '+ get_year(data[i].first_air_date)+'</span></h6><h6><span style=&quot;float:left;color:red;margin-right:2px;;&quot; class=&quot; fa fa-heart&quot; ></span>  popularity: '+Math.round(data[i].popularity)+'<sp style=&quot;float:right;&quot; ><span style=&quot;color:yellow;margin:2px;&quot; class=&quot;fa fa-star&quot; ></span>   Av Rating : '+data[i].vote_average+'</sp></h6>" data-content="<div ><h6>'+bio+'</h6></div>" onclick="go_to_page("/movie/'+data[i].id+'")" class="search_poster"> <div id="searc_poster_content" style=" background-image: url(http://image.tmdb.org/t/p/w154'+data[i].poster_path+');" > <div class="bottom dropdown"> <a class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Add to library </a>  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4"><li role="presentation"><a role="menuitem" tabindex="-1"   onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watching`, null);" >Watching</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1"   onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `completed`, null);" >Completed</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1"    onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watchlist`, null);" class="dropdown-item" type="button">watch List</a> </li> </ul></div></div><div class="ellipsis"><a href="/tv/'+data[i].id+'"><h6 >'+data[i].original_name+'</h6></a></div></div>');
     }
     if(data.length <= 0)
        $('.searching_results').html('<div  ><h3 class="text_center" > No Results Found .. </h3> </div>');
@@ -115,7 +151,7 @@ console.log(uri);
     if(data[i].original_language != 'en')
       continue;
       bio = data[i].overview.replace(/"/g, '`');
-  $('.searching_results').append('<div data-toggle="popover" data-placement="left" data-original-title="<h6>'+data[i].original_name + '<span> '+ get_year(data[i].first_air_date)+'</span></h6><h6><span style=&quot;float:left;color:red;margin-right:2px;;&quot; class=&quot; fa fa-heart&quot; ></span>  popularity: '+Math.round(data[i].popularity)+'<sp style=&quot;float:right;&quot; ><span style=&quot;color:yellow;margin:2px;&quot; class=&quot;fa fa-star&quot; ></span>   Av Rating : '+data[i].vote_average+'</sp></h6>" data-content="<div ><h6>'+bio+'</h6></div>" onclick="go_to_page("/movie/'+data[i].id+'")" class="search_poster"> <div id="searc_poster_content" style=" background-image: url(http://image.tmdb.org/t/p/w154'+data[i].poster_path+');" > <div class="bottom dropdown"> <a class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Add to library </a>  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4"><li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watching`, null);" >Watching</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `completed`, null);" >Completed</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watchlist`, null);" class="dropdown-item" type="button">watch List</a> </li> </ul></div></div><div class="ellipsis"><a href="/tv/'+data[i].id+'"><h6 >'+data[i].original_name+'</h6></a></div></div>');
+  $('.searching_results').append('<div data-toggle="popover" data-placement="left" data-original-title="<h6>'+data[i].original_name + '<span> '+ get_year(data[i].first_air_date)+'</span></h6><h6><span style=&quot;float:left;color:red;margin-right:2px;;&quot; class=&quot; fa fa-heart&quot; ></span>  popularity: '+Math.round(data[i].popularity)+'<sp style=&quot;float:right;&quot; ><span style=&quot;color:yellow;margin:2px;&quot; class=&quot;fa fa-star&quot; ></span>   Av Rating : '+data[i].vote_average+'</sp></h6>" data-content="<div ><h6>'+bio+'</h6></div>" onclick="go_to_page("/movie/'+data[i].id+'")" class="search_poster"> <div id="searc_poster_content" style=" background-image: url(http://image.tmdb.org/t/p/w154'+data[i].poster_path+');" > <div class="bottom dropdown"> <a class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Add to library </a>  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4"><li role="presentation"><a role="menuitem" tabindex="-1"   onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watching`, null);" >Watching</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1"   onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `completed`, null);" >Completed</a> </li>  <li role="presentation"><a role="menuitem" tabindex="-1"    onclick="add_to_lib('+data[i].id+', `http://image.tmdb.org/t/p/w154'+data[i].poster_path+'`, `'+data[i].original_name+'`, `watchlist`, null);" class="dropdown-item" type="button">watch List</a> </li> </ul></div></div><div class="ellipsis"><a href="/tv/'+data[i].id+'"><h6 >'+data[i].original_name+'</h6></a></div></div>');
  
     }
 
@@ -126,16 +162,34 @@ console.log(uri);
 
 }
 
-function add_to_lib(id, pic, name, status, score){
+function add_to_lib(id, pic, name, status, score, ep_count){
+ 
 
-    
+
+
+var url = 'http://api.themoviedb.org/3/tv/'+id+'?api_key=54f297aa644bf4f27044771fc75cbb64';
+
+$.ajax({
+            type: 'GET',
+            url: url,
+            async: false,
+            jsonpCallback: 'testing',
+            contentType: 'application/json',
+            dataType: 'jsonp',
+            success: function(ajax) {
+              window.moviex_global_ep_count = ajax.number_of_episodes;
+              window.moviex_global_seasons = ajax.number_of_seasons;
+
+}
+});
    var data = {
     status: status,
     score: score,  
    movie_id: id,
    movie_pic: pic,
    movie_name: name,
-  
+  ep_count: window.moviex_global_ep_count,
+  seasons: window.moviex_global_seasons,
 
 
     }
@@ -202,3 +256,10 @@ $(window).on('scroll', function() {
 });
 
  
+
+    $(document).ready(function(){
+        $('a').click(function(event){
+    event.preventDefault();
+ console.log('fdsfdsfsd');
+  
+    }); });

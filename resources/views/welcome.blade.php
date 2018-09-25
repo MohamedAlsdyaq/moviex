@@ -8,10 +8,35 @@
 
 <script src="https://npmcdn.com/flickity@2/dist/flickity.pkgd.js"></script>
 <script src="/js/update_entry.js"></script>
-<link rel="stylesheet" type="text/css" href="/css/movie.css">
+
  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
    <script src="/js/bootstrap-suggest.js"></script>
+   <style type="text/css">
+   #thumbnails:hover{
+  border-radius: 5px;
+
+  background-color: #dadede !important;
+}
+   #thumbnails{
+  height: 30px;
+  width: 80%;
+}
+     .active{
+      background-color: white !important;
+      outline: none !important;
+      border: 0 !important;
+      transition: .3s ease;
+ box-shadow: none !important;
+ border-radius: 0px !important;
+     }
+     .current_tab{
+         background-color: white !important;
+     }
+     @media only screen and (max-width: 1024px) {
+
+     }
+   </style>
 </head>
  @foreach($tvs as $tv)
 
@@ -151,37 +176,48 @@ $note = '';
 if($key == 0){$style = "   margin-left: 150px !important;";}
   else{$style = " ";}
  $quick_id = $tv['id'];  ?>
- 
-  <div style="{{$style}}     background-size: contain !important; background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7) ) , url('{{$tv['show']['show_pic']}}') !important ;" class="quick_container  carousel-cell  ">
+ <form id="quick_form_{{$tv['id']}}" >
+  <div style="{{$style}}  background-position: center !important;   background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7) ) , url('http://image.tmdb.org/t/p/w500{{$tv['show']['show_header']}}') !important ;  background-position: 50% 0 !important;      background-repeat: no-repeat !important;" class="quick_container  carousel-cell  ">
     <div class=" " >
     <div class=" quick_action" > 
-            <textarea class="form-control" style="resize:none;" ></textarea>
-           
-           <p style="float:left" > View Discussion </p>
-        <div  style="float:left" class="edit" > 
-            <div class="col-xs-6" >
-<i data-toggle="modal" data-target="#{{$quick_id}}" class="cursor fa fa-edit" style="font-size:18px"></i>
- 
 
+            <input style="height: 70px;" type="text" onkeypress="quick_type(this, {{$quick_id}})" max="250" id="quick_input_{{$tv['id']}}" class="form-control" style="resize:none;" > 
+           <div id="quick_spoiler_{{$tv['id']}}" style="visibility: hidden; float: left;">
+
+            <div style=" ;" class="funkyradio">
+              <div class="funkyradio-default">
+                <div class="funkyradio-info">
+                  <input type="checkbox" name="checkbox" id="quick_spoiler_check{{$tv['id']}}" />
+                  <label for="checkbox6">Spoiler</label>
+                </div>
+              </div>
             </div>
-            <div class="col-xs-6">
-            <button data-current="{{$tv['ep_count']}}" onclick="incrment_ep(this, {{$tv['id']}}, {{$tv['show']['ep_count']}})" class="btn btn-sm btn-success" >
-         {{$tv['ep_count']}} <i class="fa fa-plus"></i>
+
+        </div>
+          
+        <div  style="float: right; margin-right: 10px;" class="edit" > 
+             
+<i data-toggle="modal" data-target="#{{$quick_id}}" class="cursor fa fa-edit" style="font-size:18px"></i>
+   
+            
+            <button id="increment_btn{{$tv['id']}}" data-current="{{$tv['ep_count']}}" onclick="incrment_ep(this, {{$tv['id']}}, {{$tv['show']['ep_count']}}, {{$tv['show_id']}} )" class="btn btn-sm btn-success" >
+         {{$tv['ep_count']}}  <i class="fa fa-plus"></i>
         </button>
-    </div>
+    
         </div>
 
     </div>
+  </form>
                 <div id="" class="c row">
 
                     <div class="col-sm-3 col-xs-3" >  
-                            <img class="img-responsive show_img"    src="{{$tv['show']['show_pic']}}"> 
+                            <img class="img-responsive show_img"    src="http://image.tmdb.org/t/p/w154{{$tv['show']['show_pic']}}"> 
                     </div>
                 <div class="row quick_progress col-sm-7 col-xs-7" > 
 <?php $loader  = $tv['ep_count'] / $tv['show']['ep_count'] * 100 ;   ?>
-<script > console.log({{$loader}}) </script>
-                    <h4 id="quick_show_name" style="bottom: 0%" >{{$tv['show']['show_id']}}fds </h4>
-<div id="#p" > <div class="loaded" ><div style="width: {{$loader}}%" class="loaded2" >.</div>.</div> </div>
+<script > //////console.log({{$loader}}) </script>
+        <a class="anchor" href="tv/{{$tv['show']['id']}}" > <h4 id="quick_show_name" style="bottom: 0%" >{{$tv['show']['show_name']}} </h4> </a>
+<div id="#p" > <div class="loaded" ><div style="width: {{$loader}}%" class="loaded2" ></div></div> </div>
                  <div class="col-xs-12" > 
                     <h6><small>Ep {{$tv['ep_count']}} of {{$tv['show']['ep_count']}}</small></h6>  
                 </div>
@@ -213,44 +249,37 @@ if($key == 0){$style = "   margin-left: 150px !important;";}
 @endif
 </div>
 
-<div class="app container" >
+<div class="" >
 
  
 <!-- Flickity HTML init -->
 
 
-    <div  class="btn-group-vertical col-xs-12 col-sm-3" >
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <div  class="sticky btn-group-vertical   col-lg-3 col-md-3 col-sm-3 col-xs-2 " >
+      <div   class=" btn-group btn-group-toggle" data-toggle="buttons">
  
-    <button class="btn btn-light" onclick=" get_post('following'); change_section(event, 'following');" type="radio" name="options" id="option1" autocomplete="off" checked><i class="fab fa-connectdevelop"></i> Following</button>
+    <button class="btn btn-light" onclick="$('.current_tab').removeClass('active').removeClass('current_tab');  get_post('following', '/posts/get/following'); call_type = 'following'; change_section(event, 'following');" type="radio" name="options" id="option1" autocomplete="off" checked><i class="fab fa-connectdevelop"></i> Following</button>
  
-    <button class="btn btn-light" onclick=" get_post('movies'); change_section(event, 'movies');" type="radio" name="options" id="option2" autocomplete="off"><i class="fas fa-film"></i> Movies</button>
+    <button class="btn btn-light" onclick="$('.current_tab').removeClass('active').removeClass('current_tab');  get_post('movies', '/posts/get/movies'); call_type = 'movies'; change_section(event, 'movies');" type="radio" name="options" id="option2" autocomplete="off"><i class="fas fa-film"></i> Movies</button>
   </label>
  
-    <button class="btn btn-light" onclick="get_post('tv'); change_section(event, 'tv'); " type="radio" name="options" id="option3" autocomplete="off"> <i class="fas fa-tv"></i> Tv series</button>
+    <button class="btn btn-light" onclick="$('.current_tab').removeClass('active').removeClass('current_tab'); get_post('tv', '/posts/get/tv'); call_type = 'tv'; change_section(event, 'tv'); " type="radio" name="options" id="option3" autocomplete="off"> <i class="fas fa-tv"></i> Tv series</button>
  
  
-    <button class="btn btn-light" onclick="get_post('global');change_section(event, 'global'); " type="radio" name="options" id="option3" autocomplete="off"> <i class="fas fa-globe"></i> Global</button>
+    <button class="current_tab btn btn-light" onclick="$('.current_tab').removeClass('active').removeClass('current_tab'); get_post('global', '/posts/get/global'); call_type = 'global'; change_section(event, 'global'); " type="radio" name="options" id="option3" autocomplete="off"> <i class="fas fa-globe"></i> Global</button>
  
 </div>
 
      
-        <br>
-            <p>Groups
-                <hr>
-                <p> Apperantely you are not a mebmer of any group. discover Groups
-            <div class="white_box" >
-                
-            </div>
-
+      
 
         </div>
-        <div class="col-sm-6 col-xm-12">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col ">
          
             @if(Auth::check() )
             @include('modules.post')
             @endif()
-<br><br><br><br><br><br> 
+            
 
 
             <div id="global" class="common ">
@@ -265,174 +294,55 @@ if($key == 0){$style = "   margin-left: 150px !important;";}
                         @endif()
  
 
-                        <div id="posts_loading"></div>
-<div class="col-sm-12 col-md-12  _4-u2 mbm _2iwp _4-u8" >
-  <div class="_2iwo" data-testid="fbfeed_placeholder_story">
-    <div class="_2iwq">
-      <div class="_2iwr"></div>
-      <div class="_2iws"></div>
-      <div class="_2iwt"></div>
-      <div class="_2iwu"></div>
-      <div class="_2iwv"></div>
-      <div class="_2iww"></div>
-      <div class="_2iwx"></div>
-      <div class="_2iwy"></div>
-      <div class="_2iwz"></div>
-      <div class="_2iw-"></div>
-      <div class="_2iw_"></div>
-      <div class="_2ix0"></div>
-    </div>
-  </div>
-</div>
+        <div id="global"></div>
 
-<div class="col-sm-12 col-md-12_4-u2 mbm _2iwp _4-u8"  >
-  <div class="_2iwo" data-testid="fbfeed_placeholder_story">
-    <div class="_2iwq">
-      <div class="_2iwr"></div>
-      <div class="_2iws"></div>
-      <div class="_2iwt"></div>
-      <div class="_2iwu"></div>
-      <div class="_2iwv"></div>
-      <div class="_2iww"></div>
-      <div class="_2iwx"></div>
-      <div class="_2iwy"></div>
-      <div class="_2iwz"></div>
-      <div class="_2iw-"></div>
-      <div class="_2iw_"></div>
-      <div class="_2ix0"></div>
-    </div>
-  </div>
-</div>
-<div class="no_more" ></div>
+
+
+ 
             </div> <!-- Global -->
             <div id="posts_loading"></div>
-            <div id="tv">
-<div class="col-sm-12 col-md-12  _4-u2 mbm _2iwp _4-u8" >
-  <div class="_2iwo" data-testid="fbfeed_placeholder_story">
-    <div class="_2iwq">
-      <div class="_2iwr"></div>
-      <div class="_2iws"></div>
-      <div class="_2iwt"></div>
-      <div class="_2iwu"></div>
-      <div class="_2iwv"></div>
-      <div class="_2iww"></div>
-      <div class="_2iwx"></div>
-      <div class="_2iwy"></div>
-      <div class="_2iwz"></div>
-      <div class="_2iw-"></div>
-      <div class="_2iw_"></div>
-      <div class="_2ix0"></div>
-    </div>
-  </div>
-</div>
-
-<div class="col-sm-12 col-md-12_4-u2 mbm _2iwp _4-u8"  >
-  <div class="_2iwo" data-testid="fbfeed_placeholder_story">
-    <div class="_2iwq">
-      <div class="_2iwr"></div>
-      <div class="_2iws"></div>
-      <div class="_2iwt"></div>
-      <div class="_2iwu"></div>
-      <div class="_2iwv"></div>
-      <div class="_2iww"></div>
-      <div class="_2iwx"></div>
-      <div class="_2iwy"></div>
-      <div class="_2iwz"></div>
-      <div class="_2iw-"></div>
-      <div class="_2iw_"></div>
-      <div class="_2ix0"></div>
-    </div>
-  </div>
-</div>
+               <div style="display: none" id="tv" class="common ">
+ 
 
 
             </div> <!-- Tv -->
              <div style="display: none" id="movies" class="common ">
-<div id="posts_loading"></div>
-<div class="col-sm-12 col-md-12  _4-u2 mbm _2iwp _4-u8" >
-  <div class="_2iwo" data-testid="fbfeed_placeholder_story">
-    <div class="_2iwq">
-      <div class="_2iwr"></div>
-      <div class="_2iws"></div>
-      <div class="_2iwt"></div>
-      <div class="_2iwu"></div>
-      <div class="_2iwv"></div>
-      <div class="_2iww"></div>
-      <div class="_2iwx"></div>
-      <div class="_2iwy"></div>
-      <div class="_2iwz"></div>
-      <div class="_2iw-"></div>
-      <div class="_2iw_"></div>
-      <div class="_2ix0"></div>
-    </div>
-  </div>
-</div>
-
-<div class="col-sm-12 col-md-12_4-u2 mbm _2iwp _4-u8"  >
-  <div class="_2iwo" data-testid="fbfeed_placeholder_story">
-    <div class="_2iwq">
-      <div class="_2iwr"></div>
-      <div class="_2iws"></div>
-      <div class="_2iwt"></div>
-      <div class="_2iwu"></div>
-      <div class="_2iwv"></div>
-      <div class="_2iww"></div>
-      <div class="_2iwx"></div>
-      <div class="_2iwy"></div>
-      <div class="_2iwz"></div>
-      <div class="_2iw-"></div>
-      <div class="_2iw_"></div>
-      <div class="_2ix0"></div>
-    </div>
-  </div>
-</div>
+ 
 
             </div> <!-- Movies-->
 <div style="display: none" id="following" class="common ">
-<div id="posts_loading"></div>
-<div class="col-sm-12 col-md-12  _4-u2 mbm _2iwp _4-u8" >
-  <div class="_2iwo" data-testid="fbfeed_placeholder_story">
-    <div class="_2iwq">
-      <div class="_2iwr"></div>
-      <div class="_2iws"></div>
-      <div class="_2iwt"></div>
-      <div class="_2iwu"></div>
-      <div class="_2iwv"></div>
-      <div class="_2iww"></div>
-      <div class="_2iwx"></div>
-      <div class="_2iwy"></div>
-      <div class="_2iwz"></div>
-      <div class="_2iw-"></div>
-      <div class="_2iw_"></div>
-      <div class="_2ix0"></div>
-    </div>
-  </div>
-</div>
-
-<div class="col-sm-12 col-md-12_4-u2 mbm _2iwp _4-u8"  >
-  <div class="_2iwo" data-testid="fbfeed_placeholder_story">
-    <div class="_2iwq">
-      <div class="_2iwr"></div>
-      <div class="_2iws"></div>
-      <div class="_2iwt"></div>
-      <div class="_2iwu"></div>
-      <div class="_2iwv"></div>
-      <div class="_2iww"></div>
-      <div class="_2iwx"></div>
-      <div class="_2iwy"></div>
-      <div class="_2iwz"></div>
-      <div class="_2iw-"></div>
-      <div class="_2iw_"></div>
-      <div class="_2ix0"></div>
-    </div>
-  </div>
-</div>
-
+ 
             </div> <!-- Following timeline -->
 
         </div>
-        <div class="col-sm-3">
-            
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+          
+            <p style="font-weight: bold; margin-left: -.0%" >My Groups
+           @if(count($groups) == 0)            
+   <p> Apperantely you are not a mebmer of any groups.  <a href="/discover/groups" >discover Groups </a>
+    @endif()
+    @foreach($groups as $group)
+    <div style=" " id="thumbnails" > 
+       <img width="30" height="30" src="{{$group['group']['picture']}}" style=" margin-right: 7px;float: left;" > 
+       <a href="/group/{{$group['group']['id']}}" > <p  style="margin-top: 7px;float: left; margin-bottom: 7px;" >  {{$group['group']['name']}} </a>
+        <p style=" margin-left:90%;" > 0
+    </div>
+<br>
+@endforeach()
+    <hr><br>
+        <p style="font-weight: bold; margin-left: -.0%" >My Lists
+           
+           @if(count($lists) == 0)   
+                <p> Apperantely you dont have any lists. <a href="/discover/lists" >discover Lists </a>
+          @endif
+    @foreach($lists as $list)
+    <div  id="thumbnails" > 
+       
+       <a href="/list/{{$list['id']}}" > <p  style="margin-top: 7px;float: left; margin-bottom: 7px;" >  {{$list['title']}} </a>
+        <p style=" margin-left:90%;" > {{$list['listentries_count']}}
+    </div>
+<br>
+@endforeach()  
             @include('modules.footer')
 
         </div>
@@ -443,162 +353,77 @@ if($key == 0){$style = "   margin-left: 150px !important;";}
 
 </div>
 <script >
-
-function get_post(id){
-if(id == null)
-  return false;
+call_type = 'global';
+function get_post(id, uri=false){
+  if(uri == false)
+    uri = id
 var content = ' ';
   $.ajax({
     type: 'GET',
-    url: '/posts/get/'+id,
+    url: uri,
     jsonpCallback: 'testing',
     contentType: 'application/json',
-    
+    beforeSend: function(){
+      $('#'+id).append('<img id="loader_big" src="/img/ring-alt.gif">');
+    },
     success: function(ajax) {
-      console.log(ajax);
+ $('#loader_big').remove();
 data = ajax.data;
- 
+window.moviex_global_next_page = ajax.next_page_url;
+window.moviex_data_paginate_limit = ajax.last_page;
  $('._4-u8').remove();
-if(ajax.next_page_url !== null){
- var o = ajax.next_page_url;
-o = o.slice(29);
- window.moviex_id_plus_paginater = o;
- window.moviex_data_paginate_limit = ajax.last_page;
-}
-console.log(ajax.current_page);
-console.log(ajax.last_page);
-
-if(ajax.current_page > ajax.last_page){
-
-window.moviex_id_plus_paginater = null;
-//$('.no_more').removeClass('no_more');
-return false;
-
-}
-
-
  for(i=0; i<data.length; i++){
-
-var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-     
-$('#write_on_me').val(JSON.parse(this.responseText) );
-    }
-  };
-  xhttp.open("GET", "/spoiler/check/"+data[i].show_id, true);
-  xhttp.send();
-/* Dont Load posts from nlocked users 
-/
-
-var xx = new XMLHttpRequest();
-  xx.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var det = JSON.parse(this.responseText)  ;
-      console.log(det.active);
-      window.moviex_stat_blocked = false;
-if(det.active === 2) 
-window.moviex_stat_blocked = true;
-    
-
-    }
-  };
-  xhttp.open("GET", "/check_relationship/"+data[i].user.id, true);
-  xhttp.send();
-console.log(window.moviex_stat_blocked);
-if(window.moviex_stat_blocked == true){
-
-  continue;
-}
-*/
- content = ' ';
-      content += '<div id="post_s"> <figure id="post'+data[i].id+'"><div class="post_container  col-xs-12" > <div style="padding:5px;" ><img class="img-circle" style="float:left ; margin-right:4px; " src="'+data[i].user.picture+'" height="30" width="30" ><div style="float:left" >'+data[i].user.name+' <span > - '+formatDate(data[i].created_at) +'</span></div><br>    <h6></h6></div> ';
-     var imgs = ' ';
-        if(data[i].postcontents.length > 0){
-          for(j=0; j<data[i].postcontents.length; j++){
-            imgs += '<img src="/'+data[i].postcontents[j].content+'" > ';
-          }
-        }
-    if(data[i].spoiler == 1 && data[i].ep_id >= $('#write_on_me').val()){
-
-    content += '<div onclick="spoiler(this,  spoiler'+data[i].id+' )" class="spoilered" > <h5 style="margin:4px;" >'+data[i].content+'</h5>'+imgs+' </div> <div id="spoiler'+data[i].id+'" class="spoiler_alert" ><span class="fa fa-2x fa-eye-slash" ></span> <h4>This Post Contains Spoiler! </h4></div>'; 
-
-    }else{
-    content += '<h5 style="margin:4px;" >'+data[i].content+'</h5> '+imgs; 
+ 
+ content = display_post(data[i]);
    
-
-    }
-     liking = ' <i data-id="'+data[i].id+'" onclick="like(this, '+data[i].likes.length+')" style="float:left" class="fa heart fa-heart-o"></i>';
-
-if($('#my_id').val() != null){
-  
-    for(k=0; k<data[i].likes.length; k++){
-      console.log(data[i].likes[k].user_id);
-      console.log($('#my_id').val() );
-      if($('#my_id').val() == data[i].likes[k].user_id){
-         liking = '<i style="color:red; float:left" class="fa fa-heart"></i> ';
-    liked = true;
-    break;
-  }
-  else{
-        console.log('none');
-    }
-  }
-}
- 
-
-   content +='</div>  <div style="display:block; bottom: 0; margin-top:10px; padding:8px;" >'+liking+'<span id="new_like'+data[i].id+'" ></span> <span id="like'+data[i].id+'" >  '+data[i].likes.length+'  </span> <i onclick="myFunction('+data[i].id+')"  style="float:right" class="dropbtn fa fa-ellipsis-h"></i> </div> </figure><div id="myDropdown'+data[i].id+'" class="dropdown-content">  <a onclick="copy_link('+data[i].id+')" >Copy Link to Post</a>    <a onclick="block('+data[i].user.id+')"   >Block @'+data[i].user.name+'</a>    <a data-toggle="modal" data-target="#report_modal" onclick="report('+data[i].id+')" >Report Post</a></div> <div style="margin-bottom:7px; padding-bottom:7px;"  onclick="ss('+data[i].id+', this)" >  <h4  class="text-center "  > Show More </h4> </div></div> </div>' ;
-
-   $('#'+id).append(content);
-
- }
- if(ajax.current_page >= ajax.last_page){
-
-//window.moviex_id_plus_paginater = null;
-        $('.no_more').html('<h5> No More Posts to be Showen!</h5> ');
-$('.no_more').removeClass('no_more');
-
-return false;
-
-}
-}
+ $('#'+id).append(content[0]);
+ console.log(content[1]);
+ $('.gallery'+data[i].id).imagesGrid({
+    images: content[1],
+                align: true
+            });
+   } // end for
+$('.comments').each(function(i, item ) { 
+    is = $('#'+item.id).attr('data-comment');
+    target = '#'+item.id;
+    //console.log(id + ' - '+ target)
+     display_comments(is, 10, target); 
 });
-
-
+  console.log(id);
+$('#'+id).append('<div class="col-xs-12 no_more" ></div>');
+  } //end success
+});
 }
-get_post('global');
- 
-     $(window).scroll( function(){
-      var paginatr = window.moviex_id_plus_paginater;
+get_post('global', '/posts/get/global');
+document.addEventListener('DOMContentLoaded', function(){ 
+
+
+ $(window).on('scroll', function() {
+
+
+
+      var paginatr = window.moviex_global_next_page;
       paginatr = paginatr.split("=");
       paginatr = paginatr[1];
-      if(paginatr > window.moviex_data_paginate_limit || window.moviex_id_plus_paginater  == null){
-        $('.no_more').html('<h5> No More Posts to be Showen!</h5> ');
-        $('.no_more').removeClass('no_more');
-        return 0;
-      }
+      console.log(paginatr);
+     
         /* Check the location of each desired element */
-        $('.no_more').each( function(i){
-            
-            var bottom_of_object = $(this).offset().top + $(this).outerHeight();
-            var bottom_of_window = $(window).scrollTop() + $(window).height();
-            
-            /* If the object is completely visible in the window, fade it it */
-            if( bottom_of_window > bottom_of_object ){
-                
-               get_post(window.moviex_id_plus_paginater );
-               window.moviex_id_plus_paginater  = null;
-                paginatr++;
-                    
-            }
-            
-        }); 
+  if( $('.no_more').isFullyVisible() ){
+    $('.no_more').removeClass('no_more');
+    get_post(call_type , window.moviex_global_next_page);
+  
+  }
     
+    });
+
     });
  
 
 
-  function incrment_ep(e, id, limit){
+  function incrment_ep(e, id, limit, sid){
+if($('#quick_input_'+id).val().length > 0  )
+  quick_post($('#quick_input_'+id).val(), id, $(e).attr('data-current'), sid);
+ 
 
 var current = $(e).attr('data-current');
 var current_plus = current;
@@ -606,7 +431,6 @@ current_plus++;
     if(current >= limit)
       return 0;
 
-$(e).replaceWith(' <button data-current="'+current_plus+'" onclick="incrment_ep(this, '+id+', '+limit+')" class="btn btn-sm btn-success" > '+current_plus+' <i class="fa fa-plus"></i> </button>');
 var data = {id: id, current: current}
 $.ajaxSetup({
         headers: {
@@ -625,14 +449,43 @@ $.ajax({
    
     }, 
     success: function(d){
-        console.log(d);
+      
+       
   check('Keep Watching !');
-     $('#'+id).hide(); 
+   
+$('#increment_btn'+id).replaceWith(' <button id="increment_btn'+id+'" data-current="'+current_plus+' " onclick="incrment_ep(this, '+id+', '+limit+')" class="btn btn-sm btn-success" > '+current_plus+' <i class="fa fa-plus"></i> </button>');
     }
     
 });
 
-
+return false;
   }
+
+  function quick_type(e, id){
+    //////console.log($('#quick_input_'+id).val());
+    if($('#quick_input_'+id).val().length > 0)
+     $('#quick_spoiler_'+id).css('visibility', 'visible');
+      else
+       $('quick_spoiler_'+id).css('visibility', 'hidden'); 
+  }
+ 
+document.addEventListener('DOMContentLoaded', function(){ 
+
+ $(window).on('scroll', function() {
+ var paginatr = window.moviex_global_next_page;
+      paginatr = paginatr.split("=");
+      paginatr = paginatr[1];
+      if(paginatr > window.moviex_data_paginate_limit || window.moviex_id_plus_paginater  == null){
+
+  if( $('.no_more').isFullyVisible() ){
+    $('.no_more').removeClass('no_more');
+    get_post(call_type, window.moviex_global_next_page);
+  
+  }
+
+}
+});
+});
+  
 </script>
 @endsection()

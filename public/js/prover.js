@@ -10,6 +10,7 @@ $(document).ready(function () {
   //It's better to wrap it.
 
   //Tooltip, activated by hover event
+   $('[data-toggle="tooltip"]').tooltip(); 
   $("body")     .popover({
     selector: "[data-toggle='popover']",
     container: "body",

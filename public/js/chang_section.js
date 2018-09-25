@@ -55,6 +55,7 @@ function change_section(evt, name) {
     tabcontent = document.getElementsByClassName("common");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
+        tabcontent[i].innerHTML = ' ';
     }
 
     tablinks = document.getElementsByClassName("tablinks");

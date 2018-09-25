@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\History;
 use Illuminate\Http\Request;
-
+use App\Wall;
 class HistoryController extends Controller
 {
     /**
@@ -21,6 +21,20 @@ class HistoryController extends Controller
         $history->rate = $request['score'];
         $history->type  = $type;
         $history->save();
+
+
+   Wall::updateOrCreate([
+ 'post_id' => $id,
+  'type'    => 'library'
+       ], [
+      
+       'post_id' => $id,
+        'type'    => 'library'   
+    ]);
+    
+
+
+        
     }
 
     /**

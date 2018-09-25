@@ -20,7 +20,7 @@
 <div class="row" >
 <div class="col-xs-3 filter_section" >
 	 
-	<div class="filter" >
+	<div  class="filter" >
 	<p style="  float: left;"">Year</p>
 
 		<span style="float: right; background-color: #738182; border-radius: 5px; font-size: 10px" >
@@ -180,6 +180,14 @@ All
 
 <div style="margin: 4em" class="regular-slider"></div>
 <script>
+
+
+        movie_id = null;
+
+ 
+
+
+
     function make_me_active(e){
        
        $('.active').removeClass('active');
@@ -354,5 +362,6 @@ function radio(e){
       $(e).html($(e).text() + '<i class="fas fa-check"></i>');
        $(e).removeClass('hoverable');
 }
+
 </script>
 @endsection

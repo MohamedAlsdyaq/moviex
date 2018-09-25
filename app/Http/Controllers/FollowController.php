@@ -25,7 +25,18 @@ class FollowController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function follow()
+    public function GetFollowingIds(){
+
+      if(Auth::guest())
+        return 0; 
+
+      return Follow::where('user1', Auth::user()->id)
+                    ->pluck('user2')->toJson();
+
+    }
+
+
+    public function follow($id)
     {
         //
           Follow::updateOrCreate([
@@ -37,19 +48,24 @@ class FollowController extends Controller
        'user2' => $id,
        'active' => 0      
     ]);
+    $id = Follow::select('id')->where(['user1' => Auth::user()->id, 'user2' => $id])->id;
+     DB::table('walls')->insert(
+      [
+        'post_id' => $id,
+        'type'    => 'follow'
+         
+        ]
+        );
     }
-        public function unfollow()
+        public function unfollow($id)
     {
         //
-          Follow::updateOrCreate([
+          Follow::where([
  'user1' => Auth::user()->id,
  'user2' => $id
-       ], [
-      
-       'user1' => Auth::user()->id,
-       'user2' => $id,
-       'active' => 1       
-    ]);
+       ])->delete();
+           
+    
     }
 
     public function block($id)
@@ -71,6 +87,7 @@ class FollowController extends Controller
     {
         //
         Follow::where( ['user1' => Auth::user()->id, 'user2' => $id])
+        ->where('active', 2)
             ->delete();
 
     }
